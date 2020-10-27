@@ -13,6 +13,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
+        run:
+            working-directory: amb_back
         with:
           toolchain: stable
       - name: build
