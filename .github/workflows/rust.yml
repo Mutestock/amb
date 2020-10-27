@@ -14,14 +14,20 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-          - uses: actions/checkout@v2
           - name: Build
+            uses: actions-rs/cargo@v1
             run:
                 shell: bash 
                 working-directory: ./amb_back
-                cargo build --verbose
+            with: 
+                command: build
+                args: --verbose
           - name: Run tests
+            uses: actions-rs/cargo@v1
             run: 
                 shell: bash
                 working-directory: ./amb_back
-                cargo test --verbose
+            with:
+                command: test
+                args: --verbose
+                
