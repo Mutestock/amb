@@ -3,7 +3,7 @@ name: Rust
 on:
     push:
         branches: [ $default-branch ]
-        pull_request:
+    pull_request:
         branches: [ $default-branch ]
 
 env:
@@ -22,6 +22,7 @@ jobs:
             with: 
                 command: build
                 args: --verbose
+                
           - name: Run tests
             uses: actions-rs/cargo@v1
             run: 
@@ -30,4 +31,3 @@ jobs:
             with:
                 command: test
                 args: --verbose
-                
