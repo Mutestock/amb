@@ -1,15 +1,28 @@
-name: vue
-on:
-    push:
-        branches: [ master ]
-    pull_request:
-        branches: [ master ]
+name: Node.js CI
+
+on: 
+  push:
+    branches: [ master ]
+
+default:
+  run:
+    working-directory: amb_front
+
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        steps:
-          - uses: actions/checkout@v2
-            run: 
-                shell: bash
-                working_directory: amb_front
-                echo Hello, world!
+  build:
+
+    runs-on: self-hosted
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm install
+    - run: npm run build --if-present
+    - run: npm test
