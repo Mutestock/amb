@@ -1,33 +1,22 @@
-name: Rust
+on: [push]
+name: build
 
-on:
-    push:
-        branches: [ $default-branch ]
-    pull_request:
-        branches: [ $default-branch ]
-
-env:
-    CARGO_TERM_COLOR: always
-
+defaults:
+    run:
+        working-directory: amb_back
 jobs:
-    build:
-        runs-on: ubuntu-latest
-
-        steps:
-          - name: Build
-            uses: actions-rs/cargo@v1
-            run:
-                shell: bash 
-                working-directory: ./amb_back
-            with: 
-                command: build
-                args: --verbose
-                
-          - name: Run tests
-            uses: actions-rs/cargo@v1
-            run: 
-                shell: bash
-                working-directory: ./amb_back
-            with:
-                command: test
-                args: --verbose
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - name: build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+      - name: test
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
