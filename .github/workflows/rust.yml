@@ -3,8 +3,8 @@ name: build
 
 defaults:
   run:
-    working-directory: amb_front
-    
+    working-directory: amb_back
+
 jobs:
   build:
     runs-on: ubuntu-latest
