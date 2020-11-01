@@ -2,8 +2,9 @@ on: [push]
 name: build
 
 defaults:
-    run:
-        working-directory: amb_back
+  run:
+    working-directory: amb_front
+    
 jobs:
   build:
     runs-on: ubuntu-latest
