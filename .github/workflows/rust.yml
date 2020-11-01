@@ -14,7 +14,6 @@ jobs:
           toolchain: stable
       - name: build
         uses: actions-rs/cargo@v1
-        working-directory: amb_back
         with:
           command: build
       - name: test
