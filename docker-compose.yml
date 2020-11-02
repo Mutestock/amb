@@ -1,18 +1,56 @@
 version: '3'
 
 services: 
-    hush.mutezone:
-        build: 
-            dockerfile: Dockerfile
-            context: ./amb_back
+  hush.mutezone:
+    build: 
+      context: ./amb_back
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    container_name: amb_back
+    volumes:
+      - ./target:/usr/target
+    networks:
+      - app-network      
+#	
+#
+#  webserver_nginx:
+#    image: nginx:alpine
+#    restart: always
+#    container_name: webserver_nginx
+#    tty: true
+#    ports: 
+#      - "80:80"
+#      - "443:443"
+#            
+  mutezone:
+    build:
+      context: ./amb_front
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    container_name: amb_front
+    volumes:
+      - ./amb_front:/usr/src/app/amb_front
+      - /usr/src/app/amb_front/node_modules
+    networks:
+      - app-network
+#
+  postgres_db:
+    image: postgres
+    container_name: postgres_db
+    restart: unless-stopped
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "9595:9595"
+    
+#      
+#
+networks:
+  app-network:
+    driver: bridge
 
-    nginx:
-        restart: always
-        build: 
-            dockerfile: Dockerfile
-            context: ./
-            
-    mutezone:
-        build: 
-            dockerfile: Dockerfile
-            context: ./amb_front
+volumes:
+  db_data:
+    driver: local
