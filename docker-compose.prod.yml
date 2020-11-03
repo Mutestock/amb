@@ -13,8 +13,7 @@ services:
     volumes:
       - ./target:/usr/target
     networks:
-      - app-network      
-	
+      - app-network
 
   webserver_nginx:
     image: nginx:alpine
