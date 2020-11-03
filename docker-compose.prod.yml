@@ -14,17 +14,17 @@ services:
       - ./target:/usr/target
     networks:
       - app-network      
-#	
-#
-#  webserver_nginx:
-#    image: nginx:alpine
-#    restart: always
-#    container_name: webserver_nginx
-#    tty: true
-#    ports: 
-#      - "80:80"
-#      - "443:443"
-#            
+	
+
+  webserver_nginx:
+    image: nginx:alpine
+    restart: always
+    container_name: webserver_nginx
+    tty: true
+    ports: 
+      - "80:80"
+      - "443:443"
+            
   mutezone:
     build:
       context: ./amb_front
