@@ -30,4 +30,4 @@ jobs:
         KEY: ${{ secrets.SSHKEY }}
         script: |
         cd ~/deployment
-        docker compose up -d
+        docker-compose up -d
