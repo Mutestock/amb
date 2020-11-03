@@ -8,8 +8,8 @@ services:
     ports:
       - "8000:8000"
     container_name: amb_back
-    hostname: hush
-    domainname: mutezone.site
+    # hostname: hush
+    # domainname: mutezone.site
     volumes:
       - ./target:/usr/target
     networks:
@@ -25,7 +25,7 @@ services:
       - "443:443"
     networks:
       - app-network
-            
+
   mutezone:
     build:
       context: ./amb_front
@@ -33,7 +33,7 @@ services:
     ports:
       - "8080:8080"
     container_name: amb_front
-    domainname: mutezone.site
+    # domainname: mutezone.site
     volumes:
       - ./amb_front:/usr/src/app/amb_front
       - /usr/src/app/amb_front/node_modules
