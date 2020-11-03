@@ -29,5 +29,5 @@ jobs:
         PORT: ${{ secrets.PORT }}
         KEY: ${{ secrets.SSHKEY }}
         script: |
-        cd ~/deployment
-        docker-compose up -d
+          cd ~/deployment
+          docker-compose up -d
