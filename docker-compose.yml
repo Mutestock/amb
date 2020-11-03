@@ -8,6 +8,8 @@ services:
     ports:
       - "8000:8000"
     container_name: amb_back
+    #hostname: hush
+    #domainname: mutezone.site
     volumes:
       - ./target:/usr/target
     networks:
@@ -30,6 +32,7 @@ services:
     ports:
       - "8080:8080"
     container_name: amb_front
+    #domainname: mutezone.site
     volumes:
       - ./amb_front:/usr/src/app/amb_front
       - /usr/src/app/amb_front/node_modules
@@ -44,6 +47,8 @@ services:
       - db_data:/var/lib/postgresql/data
     ports:
       - "9595:9595"
+    networks: 
+      - app-network
     
 #      
 #
