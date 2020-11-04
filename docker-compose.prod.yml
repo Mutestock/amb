@@ -8,7 +8,7 @@ services:
     ports:
       - "8000:8000"
     container_name: amb_back
-    # hostname: hush
+    hostname: hush
     # domainname: mutezone.site
     volumes:
       - ./target:/usr/target
