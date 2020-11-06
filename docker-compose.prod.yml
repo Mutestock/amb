@@ -3,7 +3,30 @@ version: '3'
 services: 
 
   
-  #nginx:
+
+
+  server:
+    build: 
+      context: ./amb_back
+      dockerfile: Dockerfile
+    #ports:
+    #  - "8000:80"
+    #container_name: amb_back
+    #hostname: hush
+    # domainname: mutezone.site
+    volumes:
+      - ./target:/usr/target
+    #networks:
+    #  - app-network
+
+    nginx:
+      restart: always
+      build:
+        dockerfile: Dockerfile
+        context: ./controller
+      ports:
+        - '5000:80'
+
   #  image: nginx
   #  restart: always
   #  container_name: nginx
@@ -20,35 +43,22 @@ services:
     #certbot:
     #  image: certbot/certbot
 
-  hush.mutezone:
-    build: 
-      context: ./amb_back
-      dockerfile: Dockerfile
-    ports:
-      - "8000:80"
-    container_name: amb_back
-    hostname: hush
-    # domainname: mutezone.site
-    volumes:
-      - ./target:/usr/target
-    networks:
-      - app-network
 
-  mutezone:
+  client:
     build:
       context: ./amb_front
       dockerfile: Dockerfile
-    ports:
-      - "8080:80"
-    container_name: amb_front
-    depends_on: 
-      - hush.mutezone
+    #ports:
+    #  - "8080:80"
+    #container_name: amb_front
+    #depends_on: 
+    #  - hush.mutezone
     # domainname: mutezone.site
     volumes:
       - ./amb_front:/usr/src/app/amb_front
       - /usr/src/app/amb_front/node_modules
-    networks:
-      - app-network
+    #networks:
+    #  - app-network
 #
   postgres_db:
     image: postgres
