@@ -19,13 +19,13 @@ services:
     #networks:
     #  - app-network
 
-    nginx:
-      restart: always
-      build:
-        dockerfile: Dockerfile
-        context: ./controller
-      ports:
-        - '5000:80'
+  nginx:
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./controller
+    ports:
+      - "5000:80"
 
   #  image: nginx
   #  restart: always
