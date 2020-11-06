@@ -17,8 +17,8 @@ services:
       - app-network
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-    certbot:
-      image: certbot/certbot
+    #certbot:
+    #  image: certbot/certbot
 
   hush.mutezone:
     build: 
