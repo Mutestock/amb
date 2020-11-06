@@ -6,7 +6,7 @@ services:
       context: ./amb_back
       dockerfile: Dockerfile
     ports:
-      - "8000:80"
+      - "8000:8000"
     container_name: amb_back
     #hostname: hush
     #domainname: mutezone.site
