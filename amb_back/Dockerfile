@@ -20,6 +20,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 EXPOSE 8000
+EXPOSE 80
 
 ENV TZ=Etc/UTC \
     APP_USER=appuser
