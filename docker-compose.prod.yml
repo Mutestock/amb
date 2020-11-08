@@ -17,6 +17,7 @@ services:
       - app-network
     volumes:
       - ./nginx/default.conf:/etc/nginx/default.conf
+      - ./var/www
       - .:/usr/share/nginx/html
     #certbot:
     #  image: certbot/certbot
