@@ -17,6 +17,7 @@ services:
       - app-network
     volumes:
       - ./nginx/default.conf:/etc/nginx/default.conf
+      - .:/usr/share/nginx/html
     #certbot:
     #  image: certbot/certbot
 
@@ -25,10 +26,10 @@ services:
       context: ./amb_back
       dockerfile: Dockerfile
     ports:
-      - "8000:80"
+      - "8000"
     container_name: amb_back
-    hostname: hush
-    domainname: mutezone.site
+    #hostname: hush
+    #domainname: mutezone.site
     volumes:
       - ./target:/usr/target
     networks:
@@ -39,7 +40,12 @@ services:
       context: ./amb_front
       dockerfile: Dockerfile
     ports:
-      - "8080:80"
+      - "8080"    
+    environment: 
+      - VIRTUAL_HOST=mutezone.site
+      - VIRTUAL_PORT=8080
+      - LETSENCRYPT_HOST=mutezone
+      - BACKEND_HOST=hush.mutezone
     container_name: amb_front
     depends_on: 
       - hush.mutezone
