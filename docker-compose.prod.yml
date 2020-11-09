@@ -82,7 +82,7 @@ services:
       - /usr/src/app/amb_front/node_modules
     #networks:
     #  - app-network
-    restart: on-failure
+    restart: always
 #
   postgres_db:
     image: postgres
