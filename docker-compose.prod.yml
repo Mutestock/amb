@@ -28,9 +28,10 @@ services:
       context: ./amb_back
       dockerfile: Dockerfile
     ports:
-      - "80:8000"
+      - "8000:8000"
     container_name: amb_back
     hostname: hush
+    domainname: mutezone.site
     volumes:
       - ./target:/usr/target
     restart: always
@@ -49,6 +50,7 @@ services:
     ports:
       - '80:8080' 
     container_name: amb_front
+    domainname: mutezone.site
     volumes:
       - ./amb_front:/usr/src/app/amb_front
       - /usr/src/app/amb_front/node_modules
