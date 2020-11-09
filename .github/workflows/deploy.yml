@@ -33,4 +33,4 @@ jobs:
         script: |
           cp -r ~/misc/ssl ~/deployment/nginx
           cd ~/deployment
-          docker-compose -f docker-compose.prod.yml up -d
+          docker-compose -f docker-compose.prod.yml up -d --build
