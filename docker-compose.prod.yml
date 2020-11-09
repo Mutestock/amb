@@ -2,6 +2,9 @@ version: '3'
 
 services: 
   nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
     image: nginx
     restart: always
     container_name: nginx
