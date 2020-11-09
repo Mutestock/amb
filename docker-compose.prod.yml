@@ -33,9 +33,10 @@ services:
     hostname: hush
     volumes:
       - ./target:/usr/target
-    networks:
-      - app-network
     restart: always
+    #networks:
+    #  - app-network
+    
     #domainname: mutezone.site
     #environment: 
     #  - VIRTUAL_HOST=mutezone.site
