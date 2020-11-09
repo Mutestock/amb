@@ -17,33 +17,12 @@ services:
     networks:
       - app-network
     volumes:
-      #- ./nginx/default.conf:/etc/nginx/default.conf
       #- ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - .:/usr/share/nginx/html
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     #certbot:
     #  image: certbot/certbot
   
-  #nginx-proxy:
-  #  restart: always
-  #  image: jwilder/nginx-proxy
-  #  ports:
-  #    - "80:80"
-  #    - "443:443"
-  #  volumes:
-  #    - "/etc/nginx/vhost.d"
-  #    - "/usr/share/nginx/html"
-  #    - "/var/run/docker.sock:/tmp/docker.sock:ro"
-  #    - "/etc/nginx/certs"
-#
-  #letsencrypt-nginx-proxy-companion:
-  #  restart: always
-  #  image: jrcs/letsencrypt-nginx-proxy-companion
-  #  volumes:
-  #    - "/var/run/docker.sock:/var/run/docker.sock:ro"
-  #  volumes_from:
-  #    - "nginx-proxy"
-
   hush.mutezone:
     build: 
       context: ./amb_back
@@ -68,7 +47,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"    
-    environment: 
     #  - VIRTUAL_HOST=mutezone.site
     #  - VIRTUAL_PORT=8080
     #  - LETSENCRYPT_HOST=mutezone.site
