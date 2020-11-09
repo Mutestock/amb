@@ -57,7 +57,7 @@ services:
       - ./target:/usr/target
     networks:
       - app-network
-    restart: on-failure
+    restart: always
     #environment: 
     #  - VIRTUAL_HOST=mutezone.site
     #  - LETSENCRYPT_HOST=mutezone.site
@@ -71,17 +71,17 @@ services:
     environment: 
       - VIRTUAL_HOST=mutezone.site
     #  - VIRTUAL_PORT=8080
-      - LETSENCRYPT_HOST=mutezone
+      - LETSENCRYPT_HOST=mutezone.site
     #  - BACKEND_HOST=hush.mutezone
     container_name: amb_front
-    depends_on: 
-      - hush.mutezone
+    #depends_on: 
+    #  - hush.mutezone
     #domainname: mutezone.site
     volumes:
       - ./amb_front:/usr/src/app/amb_front
       - /usr/src/app/amb_front/node_modules
-    networks:
-      - app-network
+    #networks:
+    #  - app-network
     restart: on-failure
 #
   postgres_db:
