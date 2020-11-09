@@ -76,7 +76,7 @@ services:
     container_name: amb_front
     depends_on: 
       - hush.mutezone
-    domainname: mutezone.site
+    #domainname: mutezone.site
     volumes:
       - ./amb_front:/usr/src/app/amb_front
       - /usr/src/app/amb_front/node_modules
