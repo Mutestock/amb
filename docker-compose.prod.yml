@@ -23,23 +23,23 @@ services:
   #  #certbot:
   #  #  image: certbot/certbot
   
-  #hush.mutezone:
-  #  build: 
-  #    context: ./amb_back
-  #    dockerfile: Dockerfile
-  #  ports:
-  #    - "8000:8000"
-  #  container_name: amb_back
-  #  #hostname: hush
-  #  #domainname: mutezone.site
-  #  volumes:
-  #    - ./target:/usr/target
-  #  networks:
-  #    - app-network
-  #  restart: always
-  #  #environment: 
-  #  #  - VIRTUAL_HOST=mutezone.site
-  #  #  - LETSENCRYPT_HOST=mutezone.site
+  hush.mutezone:
+    build: 
+      context: ./amb_back
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    container_name: amb_back
+    hostname: hush
+    volumes:
+      - ./target:/usr/target
+    networks:
+      - app-network
+    restart: always
+    #domainname: mutezone.site
+    #environment: 
+    #  - VIRTUAL_HOST=mutezone.site
+    #  - LETSENCRYPT_HOST=mutezone.site
 
   mutezone:
     build:
