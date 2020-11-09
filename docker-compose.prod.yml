@@ -66,12 +66,12 @@ services:
     build:
       context: ./amb_front
       dockerfile: Dockerfile
-    #ports:
-    #  - "8080:8080"    
+    ports:
+      - "8080:8080"    
     environment: 
-      - VIRTUAL_HOST=mutezone.site
+    #  - VIRTUAL_HOST=mutezone.site
     #  - VIRTUAL_PORT=8080
-      - LETSENCRYPT_HOST=mutezone.site
+    #  - LETSENCRYPT_HOST=mutezone.site
     #  - BACKEND_HOST=hush.mutezone
     container_name: amb_front
     #depends_on: 
