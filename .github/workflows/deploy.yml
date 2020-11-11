@@ -20,7 +20,8 @@ jobs:
         KEY: ${{ secrets.SSHKEY }}
         script: |
           cd ~/deployment
-          rm !(resources)
+          shopt -s extglob
+          rm -rf !("resources")
 
     - name: Copy file via scp
       uses: appleboy/scp-action@master

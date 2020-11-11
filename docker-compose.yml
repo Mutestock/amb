@@ -8,23 +8,11 @@ services:
     ports:
       - "8000:8000"
     container_name: amb_back
-    #hostname: hush
-    #domainname: mutezone.site
     volumes:
       - ./target:/usr/target
     networks:
       - app-network      
-#	
-#
-#  webserver_nginx:
-#    image: nginx:alpine
-#    restart: always
-#    container_name: webserver_nginx
-#    tty: true
-#    ports: 
-#      - "80:80"
-#      - "443:443"
-#            
+
   mutezone:
     build:
       context: ./amb_front
@@ -38,7 +26,7 @@ services:
       - /usr/src/app/amb_front/node_modules
     networks:
       - app-network
-#
+
   postgres:
     image: postgres:11-alpine
     restart: always
@@ -49,8 +37,6 @@ services:
     ports: 
         - 5432:5432
     
-#      
-#
 networks:
   app-network:
     driver: bridge
