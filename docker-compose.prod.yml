@@ -34,6 +34,7 @@ services:
     domainname: mutezone.site
     volumes:
       - ./target:/usr/target
+      - ../resources:/usr/resources
     restart: always
     #networks:
     #  - app-network
