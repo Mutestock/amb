@@ -1,5 +1,21 @@
+use chrono::naive::{NaiveDateTime};
+
 pub struct User{
-    id: i32,
-    username: String,
-    password: String,
+    pub id: i32,
+    pub username: String,
+    pub password: String,
+    pub email: String,
+    pub created_at: NaiveDateTime,
+    pub updated_at: NaiveDateTime,
+    pub last_login: NaiveDateTime,
+    pub admin: bool,
 }
+
+pub struct NewUser{
+    pub username: String,
+    pub password: String,
+    pub email: String,
+    pub description: String,
+    pub admin: bool,
+}
+

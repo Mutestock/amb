@@ -8,4 +8,6 @@ edition = "2018"
 
 [dependencies]
 tokio = { version = "0.2", features = ["full"] }
-warp = "0.2"
+warp = "0.2.5"
+postgres = "0.18.1"
+dotenv = "0.15.0"
