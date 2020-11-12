@@ -28,7 +28,7 @@ use self::{
 #[tokio::main]
 async fn main() {
 
-    let download_route = warp::path("files").and(warp::fs::dir("../resources"));
+    let download_route = warp::path("files").and(warp::fs::dir("/usr/resources/"));
 
     let router = health!()
         .or(download_route)

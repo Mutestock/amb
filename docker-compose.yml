@@ -9,8 +9,8 @@ services:
       - "8000:8000"
     container_name: amb_back
     volumes:
-      - ./target:/usr/target
-      - ../resources:/usr/resources
+      - ./amb_back/target:/usr/target
+      - ./resources:/usr/resources
     networks:
       - app-network      
 
