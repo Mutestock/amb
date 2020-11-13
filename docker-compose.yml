@@ -30,6 +30,7 @@ services:
     volumes:
       - ./amb_front:/usr/src/app/amb_front
       - /usr/src/app/amb_front/node_modules
+      - ../resources:/usr/resources
     networks:
       - app-network
 

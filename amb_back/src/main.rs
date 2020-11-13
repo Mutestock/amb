@@ -28,7 +28,12 @@ use self::{
 #[tokio::main]
 async fn main() {
 
-    let download_route = warp::path("files").and(warp::fs::dir("/usr/resources/"));
+    let cors = warp::cors()
+        .allow_any_origin();
+        
+    let download_route = warp::path("files")
+        .and(warp::fs::dir("/usr/resources/")
+        .with(cors));
 
     let router = health!()
         .or(download_route)
