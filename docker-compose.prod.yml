@@ -32,9 +32,11 @@ services:
     container_name: amb_back
     hostname: hush
     domainname: mutezone.site
+    environment: 
+      - DATABASE_API_KEY=${DATABASE_API_KEY}
     volumes:
       - ./amb_back/target:/usr/target
-      - ./resources:/usr/resources
+      - ../resources:/usr/resources
     restart: always
     #networks:
     #  - app-network
@@ -60,10 +62,11 @@ services:
   postgres:
     image: postgres:11-alpine
     restart: always
-    environment: 
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_DB: ${POSTGRES_DB}
+    environment: ½½
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - PGDATA=/var/lib/postgres/data      
     ports: 
         - 5432:5432
 #    
