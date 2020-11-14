@@ -29,7 +29,9 @@ use self::{
 async fn main() {
 
     let cors = warp::cors()
-        .allow_any_origin();
+        .allow_any_origin()
+        .allow_headers(vec!["User-Agent", "Sec-Fetch-Mode", "Referer", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers", "content-type"])
+        .allow_methods(vec!["POST", "GET", "UPDATE", "DELETE"]);
         
     let download_route = warp::path("files")
         .and(warp::fs::dir("/usr/resources/")

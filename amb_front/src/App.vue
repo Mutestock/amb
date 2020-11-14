@@ -26,7 +26,7 @@
 
 <script>
 //import HelloWorld from './components/HelloWorld.vue'
-import axios from 'axios';
+//import axios from 'axios';
 
 export default {
   name: 'App',
@@ -37,9 +37,9 @@ export default {
       isPlaying: false,
       songs: [
         {
-          title: "bird",
+          title: "river",
           artist: "derp",
-          src: "",
+          src: require('./assets/river.wav'),
         },
         //{
         //  title: "creak",
@@ -82,11 +82,12 @@ export default {
     //}
   },
   created () {
-    axios.get('mutezone.site:8000/files/bird.wav')
-      .then(res => this.current.src = res.data)
-      .catch(err => console.log(err));
+    //axios.get('localhost:8000/files/river.wav')
+    //  .then(res => this.current.src = res.data)
+    //  .catch(err => console.log(err));
+    this.current = this.songs[this.index];
     this.player.src = this.current.src;
-    this.player.play();
+    //this.player.play();
   }
   //components: {
   //  HelloWorld
