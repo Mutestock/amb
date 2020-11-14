@@ -13,6 +13,7 @@ services:
       - POSTGRES_USER=${PG_USER}
       - POSTGRES_PASSWORD=${PG_PASS}
       - POSTGRES_DB=${PG_DB}
+      - DATABASE_URL=postgres://${PG_USER}:${PG_PASS}@localhost/${PG_DB}
     volumes:
       - ./amb_back/target:/usr/target
       - ../resources:/usr/resources
