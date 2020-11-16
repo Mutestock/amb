@@ -33,13 +33,17 @@ services:
     hostname: hush
     domainname: mutezone.site
     environment: 
+      - POSTGRES_USER=${PG_USER}
+      - POSTGRES_PASSWORD=${PG_PASS}
+      - POSTGRES_DB=${PG_DB}
       - DATABASE_API_KEY=${DATABASE_API_KEY}
+      - DATABASE_URL=postgres://${PG_USER}:${PG_PASS}@deployment_postgres2_1:5432/${PG_DB}
     volumes:
       - ./amb_back/target:/usr/target
       - ../resources:/usr/resources
     restart: always
-    #networks:
-    #  - app-network
+    networks:
+      - app-network
     
     #domainname: mutezone.site
     #environment: 
@@ -57,9 +61,12 @@ services:
     volumes:
       - ./amb_front:/usr/src/app/amb_front
       - /usr/src/app/amb_front/node_modules
+      - ../resources:/usr/resources
     restart: always
+    networks: 
+      app-network
 #
-  postgres:
+  postgres2:
     image: postgres:11-alpine
     restart: always
     environment:
@@ -68,13 +75,15 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - PGDATA=/var/lib/postgres/data      
     ports: 
-        - 5432:5432
-#    
-##      
-##
-#networks:
-#  app-network:
-#    driver: bridge
+      - 5432:5432
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    networks: 
+      - app-network     
+
+networks:
+  app-network:
+    driver: "bridge"
 #
 #volumes:
 #  db_data:
