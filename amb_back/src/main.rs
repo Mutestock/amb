@@ -61,6 +61,9 @@ async fn main() {
         .with(cors));
 
     let router = health!()
+        //DETACH UNDERLYING ROUTE IN PRODUCTION
+        //.or(check_basic_connection!())
+        .or(check_conn_string!())
         .or(download_route)
         .or(list_users!())
         .or(get_user!())

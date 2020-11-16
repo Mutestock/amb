@@ -15,3 +15,5 @@ pub fn database_creation() -> BoxedFilter<()>{
         .and(warp::header::exact(DATABASE_API_KEY, env::var(DATABASE_API_KEY)))
         .boxed()
 }
+
+// DO NOT INCLUDE THIS ENDPOINT IN ANY SHAPE OR FORM IN A RELEASE VERSION

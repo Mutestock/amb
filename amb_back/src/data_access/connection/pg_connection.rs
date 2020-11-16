@@ -5,7 +5,11 @@ use std::env;
 // https://docs.diesel.rs/diesel/r2d2/struct.ConnectionManager.html
 // https://docs.diesel.rs/diesel/pg/struct.PgConnection.html
 use diesel::r2d2::ConnectionManager;
-use diesel::PgConnection;
+use diesel::{
+    PgConnection,
+    //Testing
+    Connection
+};
 
 // https://docs.rs/lazy_static/1.4.0/lazy_static/
 // https://www.google.com/search?&q=why+use+lazy_static+rust
@@ -29,3 +33,13 @@ lazy_static! {
     };
 }
 //
+
+
+pub fn establish_connection() -> PgConnection{
+    dotenv().ok();
+
+    let db_url = env::var("DATABASE_URL")
+        .expect("DATABASE_URL must be set.");
+    PgConnection::establish(&db_url)
+        .expect(&format!("Error connecting to {}", db_url))
+}
