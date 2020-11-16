@@ -7,13 +7,17 @@ use warp::{
 // Courtesy of steadylearner
 // https://github.com/steadylearner/Rust-Full-Stack/blob/master/warp/database/2.%20with_db_pool/src/routes/post_route_without_reusable.rs
 
+use crate::data_access::entities::account::user::NewUser;
+
+
 //use crate::{
-//    models::{
+//    data_access::{
 //        post::{
 //            NewPost,
 //        }
 //    },
 //};
+
 
 fn path_prefix() -> BoxedFilter<()> {
     path!("api" / "user" / ..)
@@ -34,7 +38,7 @@ pub fn get() -> BoxedFilter<(i32, )> {
         .boxed()
 }
 
-pub fn create() -> warp::filters::BoxedFilter<(Newuser,)> {
+pub fn create() -> warp::filters::BoxedFilter<(NewUser,)> {
     let json_body = warp::body::content_length_limit(1024 * 16).and(warp::body::json());
 
     warp::post()
@@ -44,7 +48,7 @@ pub fn create() -> warp::filters::BoxedFilter<(Newuser,)> {
         .boxed()
 }
 
-pub fn update() -> warp::filters::BoxedFilter<(i32, Newuser,)> {
+pub fn update() -> warp::filters::BoxedFilter<(i32, NewUser,)> {
     let json_body = warp::body::content_length_limit(1024 * 16).and(warp::body::json());
 
     warp::put()

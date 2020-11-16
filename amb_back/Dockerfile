@@ -7,7 +7,6 @@ RUN cargo build --release \
     && rm src/*.rs target/release/deps/amb_back*
 
 ADD . ./
-
 RUN cargo build --release
 
 
@@ -16,6 +15,7 @@ FROM debian:buster-slim
 ARG APP=/usr/src/app
 
 RUN apt-get update \
+    && apt-get install -y libpq5 \
     && apt-get install -y ca-certificates tzdata \
     && rm -rf /var/lib/apt/lists/*
 

@@ -17,6 +17,8 @@ services:
     volumes:
       - ./amb_back/target:/usr/target
       - ../resources:/usr/resources
+      #- ./utils/libpq:/usr/include/libpq
+      #- ./utils/file:/usr/lib/libpq.so
     networks:
       - app-network      
 

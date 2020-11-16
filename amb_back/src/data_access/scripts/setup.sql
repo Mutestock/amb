@@ -1,3 +1,6 @@
+-- This sql is reference right now. Diesel will handle it through migrations.
+
+
 CREATE DATABASE IF NOT EXISTS mutezone;
 
 CREATE TABLE User{
