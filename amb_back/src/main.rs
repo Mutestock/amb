@@ -47,9 +47,9 @@ use self::{
 async fn main() {
 
     // for automatic migrations
-    // let connection = data_access::connection::pg_connection::POOL.get().unwrap();
-    // embed_migrations!();
-    // embedded_migrations::run_with_output(&connection, &mut std::io::stdout());
+    let connection = data_access::connection::pg_connection::POOL.get().unwrap();
+    embed_migrations!();
+    embedded_migrations::run_with_output(&connection, &mut std::io::stdout());
 
     let cors = warp::cors()
         .allow_any_origin()
@@ -62,7 +62,7 @@ async fn main() {
 
     let router = health!()
         //DETACH UNDERLYING ROUTE IN PRODUCTION
-        //.or(check_basic_connection!())
+        .or(check_basic_connection!())
         //.or(check_conn_string!())
         .or(download_route)
         .or(list_users!())

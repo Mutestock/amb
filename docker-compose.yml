@@ -32,7 +32,7 @@ services:
       - "8080:8080"
     container_name: amb_front
     environment: 
-      - BACKEND_HOST = amb_back
+      - BACKEND_HOST=amb_back
     #domainname: mutezone.site
     volumes:
       - ./amb_front:/usr/src/app/amb_front
