@@ -21,7 +21,7 @@ jobs:
         script: |
           cd ~/deployment
           shopt -s extglob
-          rm -rf !("resources", "data")
+          rm -rf !("resources", "data/postgres")
 
     - name: Copy file via scp
       uses: appleboy/scp-action@master
