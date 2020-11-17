@@ -4,13 +4,14 @@ use diesel::RunQueryDsl;
 use diesel::QueryDsl;
 use diesel::PgConnection;
 use serde_derive::{Deserialize, Serialize};
-use diesel::pg::Pg;
 
 use crate::schema::users;
 use crate::schema::users::dsl;
 use crate::schema::users::dsl::*;
+use crate::data_access::pw_encryption;
 
 use std::time::SystemTime;
+use rand::Rng;
 
 
 #[derive(Insertable, Deserialize, AsChangeset, PartialEq)]
@@ -21,24 +22,30 @@ pub struct NewUser{
     pub email: String,
     pub description: Option<String>,
     pub admin: bool,
+    pub salt: Option<String>,
 }
 
 impl NewUser {
-    pub fn create(&self, connection: &PgConnection) -> Result<User, diesel::result::Error> {
+    pub fn create(&self, connection: &PgConnection) -> Result<User, diesel::result::Error> {        
+        let salted = rand::thread_rng().gen::<[u8; 32]>();
+        let salted = format!("{:?}",salted);
+        let with_encryption = NewUser{
+            username: self.username.to_string(),
+            password: pw_encryption::hash_and_salt(&self.password, &salted),
+            email: self.email.to_string(),
+            description: self.description.to_owned(),
+            admin: self.admin,
+            salt: Some(salted),
+        };
+
+        //self.password = pw_encryption::hash_and_salt(&self.password, &salted);
+        //self.salt = Some(salted);
         diesel::insert_into(users::table)
-            .values(self)
+            .values(with_encryption)
             .get_result(connection)
     }
 }
 
-
-//impl NewUser{
-//    pub fn create(&self, connection: &PgConnection) -> Result<User, diesel::result::Error>{
-//        diesel::insert_into(users::table)
-//            .values(self)
-//            .get_results(connection)
-//    }
-//}
 
 #[derive(Queryable, Serialize, Deserialize, Debug, PartialEq)]
 pub struct User{
@@ -51,6 +58,7 @@ pub struct User{
     pub updated_at: Option<SystemTime>,
     pub last_login: Option<SystemTime>,
     pub admin: bool,
+    pub salt: Option<String>,
 }
 
 
@@ -84,16 +92,3 @@ impl UserList {
             UserList(result)
     }
 }
-
-
-
-//impl UserList {
-//    pub fn list(connection: &PgConnection) -> Self {
-//        let result = users
-//            .limit(10)
-//            .load::<User>(connection)
-//            .expect("Error loading users");
-//        UserList(result)
-//    }
-//}
-//
