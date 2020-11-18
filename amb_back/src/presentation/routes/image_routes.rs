@@ -25,7 +25,7 @@ pub fn get() -> BoxedFilter<(i32, )> {
         .boxed()
 }
 
-pub fn create() -> warp::filters::BoxedFilter<(NewImage,)> {
+pub fn create() -> BoxedFilter<(NewImage,)> {
     let json_body = warp::body::content_length_limit(1024 * 16).and(warp::body::json());
 
     warp::post()
@@ -35,7 +35,7 @@ pub fn create() -> warp::filters::BoxedFilter<(NewImage,)> {
         .boxed()
 }
 
-pub fn update() -> warp::filters::BoxedFilter<(i32, NewImage,)> {
+pub fn update() -> BoxedFilter<(i32, NewImage,)> {
     let json_body = warp::body::content_length_limit(1024 * 16).and(warp::body::json());
 
     warp::put()
@@ -52,3 +52,10 @@ pub fn delete() -> BoxedFilter<(i32, )> {
         .boxed()
 }
 
+pub fn get_image_by_user_id() -> BoxedFilter<(i32, )>{
+    warp::get()
+        .and(path_prefix())
+        .and(warp::path::("usr="))
+        .and(warp::path::param::<i32>())
+        .boxed()
+}

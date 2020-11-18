@@ -47,7 +47,7 @@ impl NewUser {
 }
 
 
-#[derive(Queryable, Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Identifiable, Queryable, Serialize, Deserialize, Debug, PartialEq)]
 pub struct User{
     pub id: i32,
     pub username: String,

@@ -1,6 +1,7 @@
 table! {
     images (id) {
         id -> Int4,
+        user_id -> Int4,
         title -> Text,
         path -> Text,
         description -> Nullable<Text>,
@@ -22,6 +23,8 @@ table! {
         salt -> Nullable<Varchar>,
     }
 }
+
+joinable!(images -> users (user_id));
 
 allow_tables_to_appear_in_same_query!(
     images,
