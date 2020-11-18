@@ -11,14 +11,9 @@ use diesel::{
     Connection
 };
 
-// https://docs.rs/lazy_static/1.4.0/lazy_static/
-// https://www.google.com/search?&q=why+use+lazy_static+rust
-// Use this instead of calling estabilish_connection everytime.
-// Compare it with 1. wihout_db_pool example/
 pub type Pool = r2d2::Pool<ConnectionManager<PgConnection>>;
 lazy_static! {
     pub static ref POOL: Pool = {
-        //DATABASE_URL=format!("postgres://{postgres}:{postgres}@localhost::5432/{warp}", )
         dotenv().ok();
 
         let database_url = env::var("DATABASE_URL")
@@ -32,9 +27,8 @@ lazy_static! {
         pool
     };
 }
-//
 
-
+// Manual connection without pooling. The basic method. Only used for testing via a route.
 pub fn establish_connection() -> PgConnection{
     dotenv().ok();
 
