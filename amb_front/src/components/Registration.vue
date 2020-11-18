@@ -5,11 +5,10 @@
 </template>
 
 <script>
-export default {
-    name: 'Registration',
-    props: {
-      msg: String
+    export default {
+        name: 'Registration',
+        props: {
+          msg: String
+        }  
     }
-    
-}
 </script>

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import HomePage from '../views/HomePage.vue'
 import UserPage from '../views/UserPage.vue'
 import RegistrationPage from '../views/RegistrationPage'
 
@@ -9,8 +9,8 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    name: 'HomePage',
+    component: HomePage
   },
   {
     path: '/about',
@@ -33,7 +33,7 @@ const routes = [
   {
     path: "*",
     name: "PageNotFound",
-    component:() => import('../views/PageNotFound.vue')
+    component:() => import('../views/error_pages/PageNotFound.vue')
   }
 ]
 

@@ -1,20 +1,17 @@
 <template>
-    <div>
-        {{msg}}
-    </div>
+  <div>
+    <p>{{msg}}</p>
+  </div>
 </template>
 
 <script>
 export default {
-    msg: '',
-    data () {
-        return{
-            msg:"asd"
-        }
-    }
-}
+  name: "User",
+  props: {
+    msg: String
+  }
+};
 </script>
 
 <style scoped>
-
 </style>
