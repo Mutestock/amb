@@ -45,7 +45,7 @@ jobs:
         KEY: ${{ secrets.SSHKEY }}
         script: |
           cp -r ~/misc/ssl ~/deployment/nginx
-          cat > ~/development/amb_front/.env << EOF
+          cat > ~/deployment/amb_front/.env << EOF
           VUE_APP_BACK_END_HOST=${{ secrets.BACK_END_HOST }}
           EOF
           cd ~/deployment
