@@ -1,7 +1,7 @@
 
-[![CI](https://github.com/Mutestock/amb/workflows/deploy/badge.svg)]
-[![CI](https://github.com/Mutestock/amb/workflows/rust/badge.svg)]
-[![CI](https://github.com/Mutestock/amb/workflows/vue/badge.svg)]
+![Rust](https://github.com/Mutestock/amb/workflows/Rust/badge.svg)
+![Deploy](https://github.com/Mutestock/amb/workflows/Deploy/badge.svg)
+![Node.js CI](https://github.com/Mutestock/amb/workflows/Node.js%20CI/badge.svg)
 
 Guide:
 
