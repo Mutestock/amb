@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import HomePage from '../views/HomePage.vue'
 import UserPage from '../views/UserPage.vue'
 import RegistrationPage from '../views/RegistrationPage'
+import TrackPage from '../views/TrackPage'
 
 Vue.use(VueRouter)
 
@@ -31,9 +32,14 @@ const routes = [
     component: RegistrationPage
   },
   {
+    path: '/track',
+    name: 'TrackPage',
+    component: TrackPage
+  },
+  {
     path: "*",
     name: "PageNotFound",
-    component:() => import('../views/error_pages/PageNotFound.vue')
+    component: () => import('../views/error_pages/PageNotFound.vue')
   }
 ]
 

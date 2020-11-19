@@ -6,6 +6,7 @@
         <router-link to="/about">About</router-link>|
         <router-link to="/user">User</router-link>|
         <router-link to="/registration">Registration</router-link>
+        <router-link to="/track">Tracks</router-link>
       </div>
     </header>
   </div>
