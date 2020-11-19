@@ -59,7 +59,7 @@ services:
     container_name: amb_front
     domainname: mutezone.site
     environment: 
-      - VUE_APP_BACKEND_HOST = hush.mutezone
+      - VUE_APP_BACKEND_HOST=hush.mutezone
     volumes:
       - ./amb_front:/usr/src/app/amb_front
       - /usr/src/app/amb_front/node_modules
