@@ -51,6 +51,7 @@ pub fn delete() -> BoxedFilter<(i32, )> {
         .and(warp::path::param::<i32>())
         .boxed()
 }
+/*
 
 pub fn get_image_by_user_id() -> BoxedFilter<(i32, )>{
     warp::get()
@@ -59,3 +60,4 @@ pub fn get_image_by_user_id() -> BoxedFilter<(i32, )>{
         .and(warp::path::param::<i32>())
         .boxed()
 }
+*/

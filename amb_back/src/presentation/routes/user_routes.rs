@@ -19,6 +19,8 @@ use crate::data_access::entities::account::user::NewUser;
 //};
 
 
+
+
 fn path_prefix() -> BoxedFilter<()> {
     path!("api" / "user" / ..)
         .boxed()
@@ -32,6 +34,7 @@ pub fn list() -> BoxedFilter<()> {
 }
 
 pub fn get() -> BoxedFilter<(i32, )> {
+    
     warp::get()
         .and(path_prefix())
         .and(warp::path::param::<i32>())

@@ -1,4 +1,4 @@
-use warp::{self,Filter, Rejection, Reply};
+use warp::{self,Filter};
 extern crate chrono;
 extern crate argon2;
 
@@ -18,7 +18,6 @@ use self::{
     presentation::{
         routes::{
             basic_routes,
-            file_serving_routes,
             user_routes,
             image_routes,
         },
@@ -29,7 +28,6 @@ use self::{
         },
         handlers::{
             health_handler,
-            file_serving_handler,
             user_handler,
             image_handler,
         }
@@ -48,12 +46,15 @@ async fn main() {
 
     let cors = warp::cors()
         .allow_any_origin()
-        .allow_headers(vec!["User-Agent", "Sec-Fetch-Mode", "Referer", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers", "content-type"])
-        .allow_methods(vec!["POST", "GET", "PUT", "DELETE"]);
+        .allow_headers(vec!["User-Agent", "Sec-Fetch-Mode", "Referer", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers", "content-type","Access-Control-Allow-Origin"])
+        .allow_methods(vec!["POST", "GET", "PUT", "DELETE"])
+        .build();;
+    
+    let log = warp::log("api::request");
         
     let download_route = warp::path("files")
-        .and(warp::fs::dir("/usr/resources/")
-        .with(cors));
+        .and(warp::fs::dir("/usr/resources/"));
+    //    .with(cors));
 
     let img_routes_compressed = list_images!()
         .or(get_image!())
@@ -73,7 +74,8 @@ async fn main() {
         .or(update_user!()) 
         .or(delete_user!())
         .or(img_routes_compressed)
-        .recover(file_rejection::handle_file_rejection);
+        .recover(file_rejection::handle_file_rejection)
+        .with(cors);
     
     //let end = health!().with(warp::log("health"));
 

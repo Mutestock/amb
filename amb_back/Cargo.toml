@@ -6,6 +6,10 @@ edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[[bin]]
+name = "amb_back"
+path = "src/main.rs"
+
 [dependencies]
 tokio = { version = "0.2", features = ["full"] }
 warp = "0.2.5"

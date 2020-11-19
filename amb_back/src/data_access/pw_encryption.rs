@@ -1,6 +1,4 @@
 use argon2::{self, Config};
-use dotenv::dotenv;
-use std::env;
 
 pub fn hash_and_salt(password: &str, salt: &str) -> String{
     let config = Config::default();

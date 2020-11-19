@@ -16,7 +16,7 @@ export default {
       ...mapActions(['fetchUser'])
   },
   computed: mapGetters(["allUsers"]),
-  computed() {
+  created() {
       this.fetchUser();
   },
   components: {

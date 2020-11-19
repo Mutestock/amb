@@ -1,12 +1,22 @@
-FROM rust:1.47 as builder
+#FROM rust:1.47 as builder
+#
+#RUN USER=root cargo new --bin amb_back
+#WORKDIR ./amb_back
+#COPY ./Cargo.toml ./Cargo.toml
+#RUN cargo build --release \
+#    && rm src/*.rs target/release/deps/amb_back*
+#
+#ADD . ./
+#RUN cargo build --release
 
-RUN USER=root cargo new --bin amb_back
-WORKDIR ./amb_back
-COPY ./Cargo.toml ./Cargo.toml
-RUN cargo build --release \
-    && rm src/*.rs target/release/deps/amb_back*
-
-ADD . ./
+FROM rust as builder
+WORKDIR /amb_back
+RUN echo "fn main() {}" > dummy.rs
+COPY Cargo.toml .
+RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
+RUN cargo build --release
+RUN sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
+ADD . .
 RUN cargo build --release
 
 
