@@ -1,15 +1,15 @@
 <template>
-    <div>
-        <Registration msg="From registration view"/>
-    </div>
+  <div>
+    <Registration msg="From registration view" />
+  </div>
 </template>
 
 <script>
-    import Registration from "@/components/Registration.vue"
-    export default {
-        name: "RegistrationsPage",
-        components: {
-            Registration
-        }
-    }
+import Registration from "@/components/Registration.vue";
+export default {
+  name: "RegistrationsPage",
+  components: {
+    Registration
+  }
+};
 </script>
