@@ -1,9 +1,9 @@
 import axios from 'axios';
-import * as tone from 'tone';
-import { Tone } from 'tone/build/esm/core/Tone';
+import * as Tone from 'tone'
+
 
 const state = {
-    track_audio: null
+    player: null
 };
 
 const getters = {};
@@ -16,7 +16,7 @@ const actions = {
         console.log(response.data);
     },
 
-    async createPlayer() {
+    createPlayer({ commit }) {
         const player = new Tone.player({
             url: process.env.VUE_APP_BACK_END_HOST + "/files/bird.wav",
             loop: true,
@@ -25,10 +25,13 @@ const actions = {
         Tone.loaded().then(() => {
             player.start();
         });
+        commit("setPlayer", player)
     }
 };
 
-const mutations = {};
+const mutations = {
+    setPlayer: (state, player) => (state.player = player)
+};
 
 export default {
     state,

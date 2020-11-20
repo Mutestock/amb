@@ -1,18 +1,19 @@
 <template>
   <div id="app">
+    <title>Mutezone</title>
     <Header />
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
 <script>
-  import Header from "@/components/layout/Header"
-  export default {
-    name: "app",
-    components: {
-      Header
-    }
-  }
+import Header from "@/components/layout/Header";
+export default {
+  name: "app",
+  components: {
+    Header,
+  },
+};
 </script>
 
 <style>

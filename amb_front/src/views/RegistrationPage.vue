@@ -1,5 +1,6 @@
 <template>
   <div>
+    <title>Register</title>
     <Registration msg="From registration view" />
   </div>
 </template>

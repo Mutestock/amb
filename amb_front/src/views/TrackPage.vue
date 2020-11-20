@@ -1,6 +1,7 @@
 <template>
   <div class="track">
     <p>Player goes here</p>
+    <v-btn elevation="4" @click="createPlayer">Boop</v-btn>
   </div>
 </template>
 
