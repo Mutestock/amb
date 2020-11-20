@@ -11,10 +11,7 @@ import { mapActions } from "vuex";
 export default {
   name: "TrackPage",
   methods: {
-    ...mapActions(["fetchTrackAudio", "createPlayer"]),
-  },
-  created() {
-    this.fetchTrackAudio();
+    ...mapActions(["fetchTrackAudio", "createPlayer"])
   },
 };
 </script>

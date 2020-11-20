@@ -48,7 +48,7 @@ async fn main() {
         .allow_any_origin()
         .allow_headers(vec!["User-Agent", "Sec-Fetch-Mode", "Referer", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers", "content-type","Access-Control-Allow-Origin"])
         .allow_methods(vec!["POST", "GET", "PUT", "DELETE"])
-        .build();;
+        .build();
     
     let log = warp::log("api::request");
         
@@ -75,6 +75,7 @@ async fn main() {
         .or(delete_user!())
         .or(img_routes_compressed)
         .recover(file_rejection::handle_file_rejection)
+        .with(log)
         .with(cors);
     
     //let end = health!().with(warp::log("health"));

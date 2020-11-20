@@ -17,11 +17,9 @@ const actions = {
     },
 
     createPlayer({ commit }) {
-        const player = new Tone.player({
-            url: process.env.VUE_APP_BACK_END_HOST + "/files/bird.wav",
-            loop: true,
-            autostart: true,
-        });
+        const player = new Tone.Player({
+            url: process.env.VUE_APP_BACK_END_HOST + "/files/bird.wav"
+        }).toDestination();
         Tone.loaded().then(() => {
             player.start();
         });
