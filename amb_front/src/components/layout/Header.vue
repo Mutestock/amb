@@ -5,15 +5,30 @@
         <router-link to="/">Home</router-link>|
         <router-link to="/about">About</router-link>|
         <router-link to="/user">User</router-link>|
-        <router-link to="/registration">Registration</router-link>
+        <router-link to="/registration" v-if="loggedIn"
+          >Registration</router-link
+        >
+        <router-link to="/login" v-if="loggedIn">Log in</router-link>
         <router-link to="/track">Tracks</router-link>
       </div>
+      <p v-if="username">{{username}}</p>
     </header>
   </div>
 </template>
 
 <script>
-export default {};
+import { mapGetters } from "vuex";
+export default {
+  data() {
+    return {
+      username: this.getCurrentUser.username,
+      loggedIn: this.hasLoggedInUser,
+    };
+  },
+  methods: {
+    ...mapGetters(["hasLoggedInUser", "getCurrentUser"]),
+  },
+};
 </script>
 
 <style scoped>
