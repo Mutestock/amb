@@ -26,11 +26,18 @@ const actions = {
       process.env.VUE_APP_BACK_END_HOST + "/api/user", User
     );
     commit("registrationAction", response.data);
+    // Need status code from backend. 201
+    if(User){
+      localStorage.setItem('user', User);
+    }
   }
 };
 
 const mutations = {
-  registrationAction: (state, currentUser) => (state.currentUser = currentUser)
+  registrationAction: (state, currentUser) => (state.currentUser = currentUser),
+  loginRequest(state, user){
+    state.currentUser = user;
+  }
 };
 
 export default {
