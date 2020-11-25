@@ -39,16 +39,16 @@ export default {
     ...mapActions(["registerUser"]),
     registerClick() {
       const user = {
-        "username":this.username,
-        "password":this.password, 
-        "email":this.email,
-        "description":"",
-        "admin":false
-      }
+        username: this.username,
+        password: this.password,
+        email: this.email,
+        description: "",
+        admin: false,
+      };
       this.registerUser(user);
-      this.username="";
-      this.password="";
-      this.email="";
+      this.username = "";
+      this.password = "";
+      this.email = "";
     },
   },
 };
@@ -57,6 +57,6 @@ export default {
 <style scoped>
 .registration-fields {
   width: 400px;
-  padding: 20px;
+  padding: 50px;
 }
 </style>

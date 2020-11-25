@@ -5,6 +5,7 @@ import HomePage from '../views/HomePage.vue'
 import UserPage from '../views/UserPage.vue'
 import RegistrationPage from '../views/RegistrationPage'
 import TrackPage from '../views/TrackPage'
+import LoginPage from '../views/LoginPage';
 
 Vue.use(VueRouter)
 
@@ -14,6 +15,7 @@ const routes = [
   { path: '/user', name: 'UserPage', component: UserPage },
   { path: '/registration', name: 'RegistrationPage', component: RegistrationPage },
   { path: '/track', name: 'TrackPage', component: TrackPage },
+  { path: '/login', name: 'LoginPage', component: LoginPage },
   { path: "*", name: "PageNotFound", component: () => import('../views/error_pages/PageNotFound.vue') }
 ];
 

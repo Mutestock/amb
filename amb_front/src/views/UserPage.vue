@@ -9,13 +9,12 @@
 
 <script>
 import User from "@/components/User.vue";
-import { mapGetters, mapActions } from "vuex";
+import { mapActions } from "vuex";
 export default {
   name: "UserPage",
   methods: {
     ...mapActions(["fetchUser"]),
   },
-  computed: mapGetters(["allUsers"]),
   created() {
     this.fetchUser();
   },

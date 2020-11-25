@@ -51,6 +51,14 @@ pub fn delete() -> BoxedFilter<(i32, )> {
         .and(warp::path::param::<i32>())
         .boxed()
 }
+
+pub fn upload_image() -> BoxedFilter<(warp::multipart::FormData, )> {
+    warp::post()
+        .and(path_prefix())
+        .and(warp::path("upload"))
+        .and(warp::multipart::form().max_length(5_000_000))
+        .boxed()
+}
 /*
 
 pub fn get_image_by_user_id() -> BoxedFilter<(i32, )>{

@@ -40,4 +40,10 @@ macro_rules! delete_image {
     };
 }
 
-
+#[macro_export]
+macro_rules! upload_image {
+    () => {
+        image_routes::upload()
+            .and_then(image_handler::upload)
+    };
+}

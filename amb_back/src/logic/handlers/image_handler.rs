@@ -1,4 +1,13 @@
 use warp;
+use uuid::Uuid;
+use warp::{
+    http::StatusCode,
+    multipart::{FormData, Part},
+    Filter, Rejection, Reply,
+};
+use std::convert::Infallible;
+use futures::TryStreamExt;
+use bytes::BufMut;
 
 use crate::{
     data_access::{
@@ -92,3 +101,61 @@ pub async fn delete(id: i32) -> Result<impl warp::Reply, warp::Rejection> {
     Ok(warp::reply::json(&reply))
 }
 
+async fn upload(form: FormData) -> Result<impl Reply, Rejection> {
+    let parts: Vec<Part> = form.try_collect().await.map_err(|e| {
+        eprintln!("form error: {}", e);
+        warp::reject::reject()
+    })?;
+
+    for p in parts {
+        if p.name() == "file" {
+            let content_type = p.content_type();
+            let file_ending;
+            match content_type {
+                Some(file_type) => match file_type {
+                    "media/wav" =>{ 
+                        file_ending=".wav";
+                    }
+                    "media/mp3" =>{
+                        file_ending=".mp3";
+                    }
+                    "image/png" => {
+                        file_ending=".png";
+                    }
+                    "image/jpg" => {
+                        file_ending =".jpg";
+                    }
+                    v => {
+                        eprintln!("Invalid file type found = {} ", v);
+                        return Err(warp::reject::reject())
+                    }
+                },
+                None => {
+                    eprintln!("file type could not be determined");
+                    return Err(warp::reject::reject());
+                }
+            }
+
+            let value = p
+                .stream()
+                .try_fold(Vec::new(), |mut vec, data| {
+                    vec.put(data);
+                    async move { Ok(vec) }
+                })
+                .await
+                .map_err(|e| {
+                    eprintln!("reading file error: {}", e);
+                    warp::reject::reject()
+                })?;
+
+            let file_name = format!("./files/{}.{}", Uuid::new_v4().to_string(), file_ending);
+            tokio::fs::write(&file_name, value).await.map_err(|e| {
+                eprint!("error writing file: {}", e);
+                warp::reject::reject()
+            })?;
+            println!("created file: {}", file_name);
+        }
+    }
+
+    Ok("success")
+}

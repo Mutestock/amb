@@ -10,17 +10,6 @@ use warp::{
 use crate::data_access::entities::account::user::NewUser;
 
 
-//use crate::{
-//    data_access::{
-//        post::{
-//            NewPost,
-//        }
-//    },
-//};
-
-
-
-
 fn path_prefix() -> BoxedFilter<()> {
     path!("api" / "user" / ..)
         .boxed()

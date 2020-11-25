@@ -1,8 +1,9 @@
 import axios from "axios";
+import { user_service } from '../../_services/user_service';
+
 
 const state = {
-  users: [],
-  currentUser: {},
+  currentUser: {}
 };
 
 const getters = {
@@ -10,7 +11,7 @@ const getters = {
     return state.currentUser;
   },
   hasLoggedInUser: state => {
-    return state.currentUser!==null;
+    return state.currentUser !== null;
   }
 };
 
@@ -21,21 +22,35 @@ const actions = {
     );
     console.log(response.data)
   },
-  async registerUser({ commit }, User){
-    const response = await axios.post(
-      process.env.VUE_APP_BACK_END_HOST + "/api/user", User
-    );
-    commit("registrationAction", response.data);
-    // Need status code from backend. 201
-    if(User){
-      localStorage.setItem('user', User);
+
+  async registerUser({ commit }, User) {
+    const response = user_service.register(User)
+    if (response.data) {
+      localStorage.setItem('user', JSON.stringify(User));
+      commit("registrationAction", response.data);
     }
+    else {
+      console.log("No response from server");
+    }
+  },
+
+  async loginUser({ commit }, { username, password }) {
+    const response = user_service.login(username, password);
+    if (response.data) {
+      localStorage.setItem('user', JSON.stringify(response.data));
+      commit("loginAction", response.data);
+    }
+    else {
+      console.log("No response from server");
+    }
+
   }
 };
 
 const mutations = {
+  loginAction: (state, currentUser) => (state.currentUser = currentUser),
   registrationAction: (state, currentUser) => (state.currentUser = currentUser),
-  loginRequest(state, user){
+  loginRequest(state, user) {
     state.currentUser = user;
   }
 };
