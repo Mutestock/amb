@@ -2,6 +2,7 @@
 use diesel::RunQueryDsl;
 use diesel::QueryDsl;
 use diesel::PgConnection;
+use diesel::ExpressionMethods;
 use serde_derive::{Deserialize, Serialize};
 
 use crate::schema::users;
@@ -45,6 +46,32 @@ impl NewUser {
     }
 }
 
+// For creating a response to the frontend with non-essential values excluded.
+#[derive(Queryable, Deserialize)]
+pub struct UserResponse{
+    pub username: String,
+    pub email: String,
+    pub description: Option<String>,
+    pub created_at: Option<SystemTime>,
+    pub updated_at: Option<SystemTime>,
+    pub last_login: Option<SystemTime>,
+    pub admin: bool,
+}
+
+impl UserResponse {
+    pub fn login(incoming_username: &str, incoming_password: &str, connection: &PgConnection) -> Result<UserResponse, diesel::result::Error>{
+        let data = users::table.filter(username.eq(incoming_username)).select((password, salt)).first(connection);
+        match check_pwd {
+            Ok(pwd) => {
+                
+            },
+            Err(e) => {
+                eprintln!("No user with that username")
+            }
+        }
+    }
+}
+
 
 #[derive(Identifiable, Queryable, Serialize, Deserialize, Debug, PartialEq)]
 pub struct User{
@@ -77,6 +104,7 @@ impl User{
             .execute(connection)?;
         Ok(())
     }
+    
 }
 
 #[derive(Serialize, Deserialize, Debug)]
