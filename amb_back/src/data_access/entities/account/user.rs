@@ -47,7 +47,7 @@ impl NewUser {
 }
 
 // For creating a response to the frontend with non-essential values excluded.
-#[derive(Queryable, Deserialize)]
+#[derive(Queryable, Deserialize, Serialize)]
 pub struct UserResponse{
     pub username: String,
     pub email: String,
@@ -57,21 +57,6 @@ pub struct UserResponse{
     pub last_login: Option<SystemTime>,
     pub admin: bool,
 }
-
-impl UserResponse {
-    pub fn login(incoming_username: &str, incoming_password: &str, connection: &PgConnection) -> Result<UserResponse, diesel::result::Error>{
-        let data = users::table.filter(username.eq(incoming_username)).select((password, salt)).first(connection);
-        match check_pwd {
-            Ok(pwd) => {
-                
-            },
-            Err(e) => {
-                eprintln!("No user with that username")
-            }
-        }
-    }
-}
-
 
 #[derive(Identifiable, Queryable, Serialize, Deserialize, Debug, PartialEq)]
 pub struct User{
@@ -104,7 +89,10 @@ impl User{
             .execute(connection)?;
         Ok(())
     }
-    
+ 
+    pub fn find_by_username(incoming_username: &str, connection: &PgConnection) -> Result<User, diesel::result::Error>{
+            users::table.filter(username.eq(incoming_username)).first(connection)
+    }   
 }
 
 #[derive(Serialize, Deserialize, Debug)]

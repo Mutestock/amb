@@ -43,7 +43,6 @@ const actions = {
     else {
       console.log("No response from server");
     }
-
   }
 };
 
