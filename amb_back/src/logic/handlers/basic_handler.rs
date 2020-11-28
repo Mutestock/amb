@@ -1,4 +1,5 @@
 use warp;
+use warp::Filter;
 use dotenv::dotenv;
 use std::env;
 use crate::data_access::connection::pg_connection::establish_connection;
@@ -29,4 +30,26 @@ pub async fn basic_connection() -> Result<impl warp::Reply, warp::Rejection>{
         None => res_str = "None value and no crash occured".to_owned()
     }
     Ok(res_str)
+}
+
+pub async fn home() ->  Result<impl warp::Reply, warp::Rejection>{
+    let body = r#"
+        <html>
+            <head>
+                <title>Ambience backend </title>
+                <h3> Ambience Backend</h3>
+                <hr>
+                <h4>Available endpoints</h4>
+                <h5>User</h5>
+                <p>     Create - POST - /api/user        </p>
+                <p>     Read - GET - /api/user/{id}      </p>
+                <p>     ReadList - GET - /api/user       </p>
+                <p>     Delete - DELETE - /api/user/{id} </p>
+                <p>     Update - PUT - /api/user/{id}    </p>
+                
+            
+            </head>
+        </html>
+    "#;
+    Ok(warp::reply::html(body))
 }

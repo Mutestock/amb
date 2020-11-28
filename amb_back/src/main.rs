@@ -27,7 +27,7 @@ use self::{
             file_rejection,
         },
         handlers::{
-            health_handler,
+            basic_handler,
             user_handler,
             image_handler,
         }
@@ -38,6 +38,8 @@ use self::{
 
 #[tokio::main]
 async fn main() {
+
+    println!("Hush...");
 
     // for automatic migrations
     let connection = data_access::connection::pg_connection::POOL.get().unwrap();
@@ -56,11 +58,18 @@ async fn main() {
         .and(warp::fs::dir("/usr/resources/"));
     //    .with(cors));
 
-    let img_routes_compressed = list_images!()
+    let image_routes = list_images!()
         .or(get_image!())
         .or(create_image!())
         .or(update_image!())
         .or(delete_image!());
+
+    let user_routes = list_users!()
+        .or(get_user!())
+        .or(create_user!())
+        .or(update_user!())
+        .or(delete_user!())
+        .or(login_user!());
     
 
     let router = health!()
@@ -68,13 +77,10 @@ async fn main() {
         //DETACH UNDERLYING ROUTE IN PRODUCTION
         //.or(check_conn_string!())
         .or(download_route)
-        .or(list_users!())
-        .or(get_user!())
-        .or(create_user!())
-        .or(update_user!()) 
-        .or(delete_user!())
-        .or(img_routes_compressed)
-        .recover(file_rejection::handle_file_rejection)
+        .or(user_routes)
+        .or(image_routes)
+        .or(home!())
+        .recover(file_rejection::handle_rejection)
         .with(log)
         .with(cors);
     

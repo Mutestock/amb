@@ -8,7 +8,7 @@ use serde_derive::{Deserialize, Serialize};
 use crate::schema::users;
 use crate::schema::users::dsl;
 use crate::schema::users::dsl::*;
-use crate::data_access::pw_encryption;
+use crate::data_access::auth;
 
 use std::time::SystemTime;
 use rand::Rng;
@@ -16,7 +16,7 @@ use rand::Rng;
 
 #[derive(Insertable, Deserialize, AsChangeset, PartialEq)]
 #[table_name="users"]
-pub struct NewUser{
+pub struct NewUser {
     pub username: String,
     pub password: String,
     pub email: String,
@@ -25,20 +25,32 @@ pub struct NewUser{
     pub salt: Option<String>,
 }
 
+// For login reception
+#[derive(Deserialize)]
+pub struct UserAuth {
+    pub username: String, 
+    pub password: String,
+}
+
+#[derive(Serialize)]
+pub struct LoginResponse {
+    pub token: String, 
+}
+
 impl NewUser {
     pub fn create(&self, connection: &PgConnection) -> Result<User, diesel::result::Error> {        
         let salted = rand::thread_rng().gen::<[u8; 32]>();
         let salted = format!("{:?}",salted);
         let with_encryption = NewUser{
             username: self.username.to_string(),
-            password: pw_encryption::hash_and_salt(&self.password, &salted),
+            password: auth::hash_and_salt(&self.password, &salted),
             email: self.email.to_string(),
             description: self.description.to_owned(),
             admin: self.admin,
             salt: Some(salted),
         };
 
-        //self.password = pw_encryption::hash_and_salt(&self.password, &salted);
+        //self.password = auth::hash_and_salt(&self.password, &salted);
         //self.salt = Some(salted);
         diesel::insert_into(users::table)
             .values(with_encryption)
@@ -48,7 +60,7 @@ impl NewUser {
 
 // For creating a response to the frontend with non-essential values excluded.
 #[derive(Queryable, Deserialize, Serialize)]
-pub struct UserResponse{
+pub struct UserResponse {
     pub username: String,
     pub email: String,
     pub description: Option<String>,
@@ -56,10 +68,12 @@ pub struct UserResponse{
     pub updated_at: Option<SystemTime>,
     pub last_login: Option<SystemTime>,
     pub admin: bool,
+    pub exp: usize,
 }
 
+
 #[derive(Identifiable, Queryable, Serialize, Deserialize, Debug, PartialEq)]
-pub struct User{
+pub struct User {
     pub id: i32,
     pub username: String,
     pub password: String,
@@ -72,8 +86,7 @@ pub struct User{
     pub salt: Option<String>,
 }
 
-
-impl User{
+impl User {
     pub fn find(user_id: &i32, connection: &PgConnection) -> Result<User, diesel::result::Error>{
         users::table.find(user_id).first(connection)
     }
@@ -91,8 +104,15 @@ impl User{
     }
  
     pub fn find_by_username(incoming_username: &str, connection: &PgConnection) -> Result<User, diesel::result::Error>{
-            users::table.filter(username.eq(incoming_username)).first(connection)
-    }   
+        users::table.filter(username.eq(incoming_username)).first(connection)
+    }
+
+    pub fn refresh_last_login_by_username(incoming_username: &str, connection: &PgConnection) -> Result<(), diesel::result::Error>{
+        diesel::update(users.filter(username.eq(incoming_username)))
+            .set(last_login.eq(Some(SystemTime::now())))
+            .execute(connection)?;
+        Ok(())
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug)]

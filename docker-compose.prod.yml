@@ -38,6 +38,7 @@ services:
       - POSTGRES_DB=${PG_DB}
       - DATABASE_API_KEY=${DATABASE_API_KEY}
       - DATABASE_URL=postgres://${PG_USER}:${PG_PASS}@deployment_postgres2_1:5432/${PG_DB}
+      - AMBIENCE_JWT_TOKEN_SECRET=${AMBIENCE_JWT_TOKEN_SECRET}
     volumes:
       - ./amb_back/target:/usr/target
       - ../resources:/usr/resources

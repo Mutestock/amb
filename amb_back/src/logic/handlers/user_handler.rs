@@ -7,10 +7,11 @@ use crate::{
             UserList,
             User,
             NewUser,
-            UserResponse
+            UserResponse,
+            UserAuth
         },
         connection::pg_connection::POOL,
-        pw_encryption,
+        auth,
     },
 };
 
@@ -24,36 +25,6 @@ pub async fn list()-> Result<impl warp::Reply, warp::Rejection>{
     Ok(warp::reply::json(&response))
 }
 
-pub async fn login(username: String, password: String) -> Result<impl warp::Reply, warp::Rejection>{
-    let conn = POOL.get().unwrap();
-    let response = User::find_by_username(&username, &conn);
-    let reply = match response {
-        Ok(user) => {
-            let matching_passwords = pw_encryption::verify_password(&user.username, &password, &user.salt.unwrap());
-            if matching_passwords {
-                UserResponse{
-                    username: user.username,
-                    email: user.email,
-                    description: user.description,
-                    created_at: user.created_at,
-                    updated_at: user.updated_at,
-                    last_login: Some(SystemTime::now()),
-                    admin: user.admin,
-                }
-            }
-            else {
-                // Custom error recommended
-                return Err(warp::reject::not_found())
-            }
-        },
-        Err(e)=> {
-            println!("{:#?}",e);
-            // Custom error recommended
-            return Err(warp::reject::not_found())
-        }
-    };
-    Ok(warp::reply::json(&reply))
-}
 
 pub async fn get(id: i32) -> Result<impl warp::Reply, warp::Rejection> {
     let conn = POOL.get().unwrap();
@@ -127,3 +98,39 @@ pub async fn delete(id: i32) -> Result<impl warp::Reply, warp::Rejection> {
     Ok(warp::reply::json(&reply))
 }
 
+
+// Receives Authentication user body, containing username and password.
+// Returns either an UserResponse, which is a body containing only the necessary information for the frontend application or an error. 
+pub async fn login(user_auth: UserAuth) -> Result<impl warp::Reply, warp::Rejection>{
+    let conn = POOL.get().unwrap();
+    let response = User::find_by_username(&user_auth.username, &conn);
+    let reply = match response {
+        Ok(user) => {
+            let matching_passwords = auth::verify_password(&user_auth.username, &user_auth.password, &user.salt.unwrap());
+            println!("{}", matching_passwords);
+            if matching_passwords {
+                User::refresh_last_login_by_username(&user.username, &conn);
+                UserResponse{
+                    username: user.username,
+                    email: user.email,
+                    description: user.description,
+                    created_at: user.created_at,
+                    updated_at: user.updated_at,
+                    last_login: Some(SystemTime::now()),
+                    admin: user.admin,
+                }
+            }
+            else {
+                // Custom error recommended
+                println!("Error in password matching");
+                return Err(warp::reject::not_found())
+            }
+        },
+        Err(e)=> {
+            println!("{:#?}",e);
+            // Custom error recommended
+            return Err(warp::reject::not_found())
+        }
+    };
+    Ok(warp::reply::json(&reply))
+}

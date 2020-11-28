@@ -21,3 +21,8 @@ pub fn basic_connection() -> BoxedFilter<()>{
         .and(warp::path("pgbasic"))
         .boxed()
 }
+
+pub fn home() -> BoxedFilter<()>{
+    warp::path::end()
+        .boxed()
+}

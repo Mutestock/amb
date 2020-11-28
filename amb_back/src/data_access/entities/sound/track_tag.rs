@@ -5,6 +5,8 @@ use diesel::QueryDsl;
 use diesel::PgConnection;
 use serde_derive::{Deserialize, Serialize};
 
+use std::time::SystemTime;
+
 pub struct NewTrackTag{
     pub name: String,
     pub description: String,
@@ -22,9 +24,9 @@ impl NewTrackTag{
 pub struct TrackTag{
     pub id: i32,
     pub name: String,
-    pub created_at: NaiveDateTime,
-    pub updated_at: NaiveDateTime,
-    pub description: String,
+    pub created_at: Option<SystemTime>,
+    pub updated_at: Option<SystemTime>,
+    pub description: Option<String>,
 }
 
 
@@ -45,7 +47,7 @@ impl TrackTag{
     }
 }
 
-#![derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct TrackTagList(pub Vec<TrackTag>)
 
 impl TrackTagList {

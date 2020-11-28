@@ -42,5 +42,11 @@
      };
  }
  
- 
+ #[macro_export]
+ macro_rules! login_user {
+     () => {
+         user_routes::login()
+            .and_then(user_handler::login)
+     };
+ }
  

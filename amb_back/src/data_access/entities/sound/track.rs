@@ -8,25 +8,11 @@ use diesel::RunQueryDsl;
 use diesel::QueryDsl;
 use diesel::PgConnection;
 use serde_derive::{Deserialize, Serialize};
-
-
-
-// Read them.
-// 1. diesel.rs/guides/getting-started/
-// 2. https://github.com/steadylearner/Rust-Full-Stack/blob/master/actix/src/database/models/product.rs
-
-// $echo DATABASE_URL=trackgres://trackgres:trackgres@localhost/warp > .env
-
-// $diesel setup
-// $diesel migration create_track
-// Move to migrations/ folder.
-// CREATE TABLE tracks (
-//   id SERIAL PRIMARY KEY,
-//   title VARCHAR NOT NULL,
-//   body TEXT NOT NULL
-// )
-// $diesel migration run
-
+use std::{
+    fs,
+    time::SystemTime
+};
+use uuid::Uuid;
 
 
 #[derive(Insertable, Deserialize, AsChangeset)]
@@ -34,6 +20,12 @@ use serde_derive::{Deserialize, Serialize};
 pub struct NewTrack {
     pub title: String,
     pub body: String,
+    pub credits: String,
+    pub duration: f32,
+}
+
+fn create_path(new_track: &NewTrack){
+    fs::create_dir_all("/usr/resources/{}/{}")?;
 }
 
 impl NewTrack {
@@ -49,10 +41,12 @@ pub struct Track{
     pub id: i32,
     pub title: String,
     pub duration: f32,
-    pub description: String,
+    pub uuid: String,
+    pub path: String,
+    pub description: Option<String>,
     pub credits: String,
-    pub created_at: NaiveDateTime,
-    pub updated_at: NaiveDateTime,
+    pub created_at: Option<SystemTime>,
+    pub updated_at: Option<SystemTime>,
 }
 
 impl Track {
