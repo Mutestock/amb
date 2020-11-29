@@ -24,7 +24,7 @@ use self::{
     },
     logic::{
         rejections::{
-            file_rejection,
+            error_handling,
         },
         handlers::{
             basic_handler,
@@ -38,13 +38,14 @@ use self::{
 
 #[tokio::main]
 async fn main() {
-
+    // Edgy message to signal when the main has been initiated in the docker process.
     println!("Hush...");
 
     // for automatic migrations
     let connection = data_access::connection::pg_connection::POOL.get().unwrap();
     embed_migrations!();
-    embedded_migrations::run_with_output(&connection, &mut std::io::stdout());
+    embedded_migrations::run_with_output(&connection, &mut std::io::stdout())
+        .expect("Diesel embedded migrations failed!");
 
     let cors = warp::cors()
         .allow_any_origin()
@@ -56,7 +57,6 @@ async fn main() {
         
     let download_route = warp::path("files")
         .and(warp::fs::dir("/usr/resources/"));
-    //    .with(cors));
 
     let image_routes = list_images!()
         .or(get_image!())
@@ -70,8 +70,7 @@ async fn main() {
         .or(update_user!())
         .or(delete_user!())
         .or(login_user!());
-    
-
+        
     let router = health!()
         .or(check_basic_connection!())
         //DETACH UNDERLYING ROUTE IN PRODUCTION
@@ -80,12 +79,10 @@ async fn main() {
         .or(user_routes)
         .or(image_routes)
         .or(home!())
-        .recover(file_rejection::handle_rejection)
+        .recover(error_handling::handle_rejection)
         .with(log)
         .with(cors);
     
-    //let end = health!().with(warp::log("health"));
-
     println!("Started server at localhost:8000");
     warp::serve(router).run(([0, 0, 0, 0], 8000)).await;
 }

@@ -59,7 +59,7 @@ impl NewUser {
 }
 
 // For creating a response to the frontend with non-essential values excluded.
-#[derive(Queryable, Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Clone)]
 pub struct UserResponse {
     pub username: String,
     pub email: String,
@@ -68,7 +68,6 @@ pub struct UserResponse {
     pub updated_at: Option<SystemTime>,
     pub last_login: Option<SystemTime>,
     pub admin: bool,
-    pub exp: usize,
 }
 
 
