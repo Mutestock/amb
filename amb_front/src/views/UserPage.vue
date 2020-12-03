@@ -1,25 +1,17 @@
 <template>
   <div>
-    <User msg="User" />
     <div class="user">
-      <div v-for="user in allUsers" :key="user.id">{{ user.username }}</div>
     </div>
+    <h1>{{currentUser.username}}</h1>
+    <h3></h3>
   </div>
 </template>
 
 <script>
-import User from "@/components/User.vue";
-import { mapActions } from "vuex";
+import { mapGetters } from "vuex";
 export default {
   name: "UserPage",
-  methods: {
-    ...mapActions(["fetchUser"]),
-  },
-  created() {
-    this.fetchUser();
-  },
-  components: {
-    User,
-  },
+  computed: mapGetters({
+    currentUser:'getCurrentUser'})
 };
 </script>

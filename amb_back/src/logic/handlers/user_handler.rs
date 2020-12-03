@@ -50,6 +50,7 @@ pub async fn create(new_user: NewUser) -> Result<impl warp::Reply, warp::Rejecti
     let reply = match response {
         Ok(new_user) => {
             println!("{:#?}",&new_user);
+            201
         },
         Err(e) => {
             println!("{:#?}",&e);
@@ -67,7 +68,7 @@ pub async fn update(id:i32, update_user: NewUser) -> Result<impl warp::Reply, wa
     let reply = match response {
         Ok(null) => {
             println!("{:#?}",&null);
-            null
+            204
         },
         Err(e) => {
             println!("{:#?}",e);
@@ -85,7 +86,7 @@ pub async fn delete(id: i32) -> Result<impl warp::Reply, warp::Rejection> {
     let reply = match response {
         Ok(null) =>{
             println!("{:#?}",&null);
-            null
+            204
         },
         Err(e) => {
             println!("{:#?}",e);

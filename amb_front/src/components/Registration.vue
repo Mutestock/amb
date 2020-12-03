@@ -1,22 +1,16 @@
 <template>
   <div>
     <div class="registration-fields">
+      <v-text-field label="Username" hide-details="auto" v-model="username"></v-text-field>
+      <v-text-field label="Password" hide-details="auto" v-model="password" type="password"></v-text-field>
       <v-text-field
-        label="Username"
+        label="Retype password"
         hide-details="auto"
-        v-model="username"
+        v-model="retypePassword"
+        type="password"
       ></v-text-field>
-      <v-text-field
-        label="Password"
-        hide-details="auto"
-        v-model="password"
-      ></v-text-field>
-      <v-text-field
-        label="Email"
-        hide-details="auto"
-        v-model="email"
-      ></v-text-field>
-      <v-btn elevation="4" @click="registerClick">Register </v-btn>
+      <v-text-field label="Email" hide-details="auto" v-model="email"></v-text-field>
+      <v-btn elevation="4" @click="registerClick">Register</v-btn>
     </div>
   </div>
 </template>
@@ -29,28 +23,48 @@ export default {
     return {
       username: "",
       password: "",
-      email: "",
+      retypePassword: "",
+      email: ""
     };
-  },
-  props: {
-    msg: String,
   },
   methods: {
     ...mapActions(["registerUser"]),
     registerClick() {
-      const user = {
-        username: this.username,
-        password: this.password,
-        email: this.email,
-        description: "",
-        admin: false,
-      };
-      this.registerUser(user);
-      this.username = "";
-      this.password = "";
-      this.email = "";
+      if (this.missingCredentials() === false) {
+        if (this.password === this.retypePassword) {
+          const user = {
+            username: this.username,
+            password: this.password,
+            email: this.email,
+            description: "",
+            admin: false
+          };
+          this.registerUser(user);
+          this.username = "";
+          this.password = "";
+          this.retypePassword = "";
+          this.email = "";
+        } else {
+          this.$alert("Password mismatch");
+          this.password = "";
+          this.retypePassword = "";
+        }
+      } else {
+        this.$alert("Missing credentials");
+      }
     },
-  },
+    missingCredentials() {
+      if (
+        this.password === "" ||
+        this.username === "" ||
+        this.retypePassword === "" ||
+        this.email === ""
+      ) {
+        return true;
+      }
+      return false;
+    }
+  }
 };
 </script>
 

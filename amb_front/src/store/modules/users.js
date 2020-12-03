@@ -1,57 +1,48 @@
-import axios from "axios";
-import { user_service } from '../../_services/user_service';
-
+import { userService } from "../../_services/user_service";
 
 const state = {
-  currentUser: {}
+  currentUser: localStorage.getItem("user")
 };
 
 const getters = {
-  getCurrentUser: state => {
-    return state.currentUser;
-  },
-  hasLoggedInUser: state => {
-    return state.currentUser !== null;
-  }
+  getCurrentUser: (state) => state.currentUser,
 };
 
 const actions = {
-  async fetchUser() {
-    const response = await axios.get(
-      process.env.VUE_APP_BACK_END_HOST + "/api/user/1"
-    );
-    console.log(response.data)
-  },
-
   async registerUser({ commit }, User) {
-    const response = user_service.register(User)
+    const response = userService.register(User);
     if (response.data) {
-      localStorage.setItem('user', JSON.stringify(User));
+      localStorage.setItem("user", JSON.stringify(User));
       commit("registrationAction", response.data);
-    }
-    else {
+    } else {
       console.log("No response from server");
     }
   },
 
-  async loginUser({ commit }, { username, password }) {
-    const response = user_service.login(username, password);
-    if (response.data) {
-      localStorage.setItem('user', JSON.stringify(response.data));
-      commit("loginAction", response.data);
-    }
-    else {
-      console.log("No response from server");
-    }
-  }
+  async loginUser({ commit }, info) {
+    userService.login(info.username, info.password).then((data) => {
+      if (data) {
+        localStorage.setItem("user", JSON.stringify(data.data.token));
+        const parseJwt = (token) => {
+          try {
+            return JSON.parse(atob(token.split(".")[1]));
+          } catch (e) {
+            return null;
+          }
+        };
+        let parsed = parseJwt(data.data.token);
+        commit("loginAction", parsed.user_response);
+      } else {
+        console.log("No response from server");
+      }
+    });
+  },
 };
 
 const mutations = {
   loginAction: (state, currentUser) => (state.currentUser = currentUser),
   registrationAction: (state, currentUser) => (state.currentUser = currentUser),
-  loginRequest(state, user) {
-    state.currentUser = user;
-  }
+  LOGIN_CURRENT_USER: (state, currentUser) => (state.currentUser = currentUser),
 };
 
 export default {

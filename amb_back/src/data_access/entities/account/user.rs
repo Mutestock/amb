@@ -70,7 +70,6 @@ pub struct UserResponse {
     pub admin: bool,
 }
 
-
 #[derive(Identifiable, Queryable, Serialize, Deserialize, Debug, PartialEq)]
 pub struct User {
     pub id: i32,
