@@ -14,6 +14,20 @@ use std::time::SystemTime;
 use rand::Rng;
 
 
+#[derive(Identifiable, Queryable, Serialize, Deserialize, Debug, PartialEq)]
+pub struct User {
+    pub id: i32,
+    pub username: String,
+    pub password: String,
+    pub email: String,
+    pub description: Option<String>,
+    pub created_at: Option<SystemTime>,
+    pub updated_at: Option<SystemTime>,
+    pub last_login: Option<SystemTime>,
+    pub admin: bool,
+    pub salt: Option<String>,
+}
+
 #[derive(Insertable, Deserialize, AsChangeset, PartialEq)]
 #[table_name="users"]
 pub struct NewUser {
@@ -30,6 +44,18 @@ pub struct NewUser {
 pub struct UserAuth {
     pub username: String, 
     pub password: String,
+}
+
+// For creating a response to the frontend with non-essential values excluded.
+#[derive(Deserialize, Serialize, Clone)]
+pub struct UserResponse {
+    pub username: String,
+    pub email: String,
+    pub description: Option<String>,
+    pub created_at: Option<SystemTime>,
+    pub updated_at: Option<SystemTime>,
+    pub last_login: Option<SystemTime>,
+    pub admin: bool,
 }
 
 #[derive(Serialize)]
@@ -58,31 +84,6 @@ impl NewUser {
     }
 }
 
-// For creating a response to the frontend with non-essential values excluded.
-#[derive(Deserialize, Serialize, Clone)]
-pub struct UserResponse {
-    pub username: String,
-    pub email: String,
-    pub description: Option<String>,
-    pub created_at: Option<SystemTime>,
-    pub updated_at: Option<SystemTime>,
-    pub last_login: Option<SystemTime>,
-    pub admin: bool,
-}
-
-#[derive(Identifiable, Queryable, Serialize, Deserialize, Debug, PartialEq)]
-pub struct User {
-    pub id: i32,
-    pub username: String,
-    pub password: String,
-    pub email: String,
-    pub description: Option<String>,
-    pub created_at: Option<SystemTime>,
-    pub updated_at: Option<SystemTime>,
-    pub last_login: Option<SystemTime>,
-    pub admin: bool,
-    pub salt: Option<String>,
-}
 
 impl User {
     pub fn find(user_id: &i32, connection: &PgConnection) -> Result<User, diesel::result::Error>{
@@ -121,7 +122,7 @@ impl UserList {
         let result = users
             .limit(10)
             .load::<User>(connection)
-            .expect("Error loading posts");
+            .expect("Error loading users");
             UserList(result)
     }
 }

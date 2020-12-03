@@ -1,5 +1,4 @@
 use warp;
-use warp::Filter;
 use dotenv::dotenv;
 use std::env;
 use crate::data_access::connection::pg_connection::establish_connection;

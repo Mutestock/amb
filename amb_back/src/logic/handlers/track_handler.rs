@@ -1,4 +1,3 @@
-use warp;
 use uuid::Uuid;
 use warp::{
     multipart::{FormData, Part},
@@ -9,24 +8,19 @@ use bytes::BufMut;
 
 use crate::{
     data_access::{
-        entities::account::image::{
-            ImageList,
-            Image,
-            NewImage,
+        entities::sound::track::{
+            TrackList,
+            Track,
+            NewTrack,
         },
         connection::pg_connection::POOL,
     },
 };
 
-/*
-This functionality has been excluded from the finals due to time constraints.
-Will be used if/when project continue
-*/
-
 
 pub async fn list()-> Result<impl warp::Reply, warp::Rejection>{
     let conn = POOL.get().unwrap();
-    let response = ImageList::list(&conn);
+    let response = TrackList::list(&conn);
     println!("{:#?}",&response);
 
     Ok(warp::reply::json(&response))
@@ -34,12 +28,12 @@ pub async fn list()-> Result<impl warp::Reply, warp::Rejection>{
 
 pub async fn get(id: i32) -> Result<impl warp::Reply, warp::Rejection> {
     let conn = POOL.get().unwrap();
-    let response = Image::find(&id, &conn);
+    let response = Track::find(&id, &conn);
 
     let reply = match response {
-        Ok(image) =>{
-            println!("{:#?}",&image);
-            image
+        Ok(track) =>{
+            println!("{:#?}",&track);
+            track
         },
         Err(e)=> {
             println!("{:#?}",e);
@@ -51,13 +45,13 @@ pub async fn get(id: i32) -> Result<impl warp::Reply, warp::Rejection> {
 }
 
 
-pub async fn create(new_image: NewImage) -> Result<impl warp::Reply, warp::Rejection> {
+pub async fn create(new_track: NewTrack) -> Result<impl warp::Reply, warp::Rejection> {
     let conn = POOL.get().unwrap();
-    let response = new_image.create(&conn);
+    let response = new_track.create(&conn);
 
     let reply = match response {
-        Ok(new_image) => {
-            println!("{:#?}",&new_image);
+        Ok(new_track) => {
+            println!("{:#?}",&new_track);
         },
         Err(e) => {
             println!("{:#?}",&e);
@@ -68,9 +62,9 @@ pub async fn create(new_image: NewImage) -> Result<impl warp::Reply, warp::Rejec
     Ok(warp::reply::json(&reply))
 }
 
-pub async fn update(id:i32, update_image: NewImage) -> Result<impl warp::Reply, warp::Rejection> {
+pub async fn update(id:i32, update_track: NewTrack) -> Result<impl warp::Reply, warp::Rejection> {
     let conn = POOL.get().unwrap();
-    let response = Image::update(&id, &update_image, &conn);
+    let response = Track::update(&id, &update_track, &conn);
 
     let reply = match response {
         Ok(null) => {
@@ -88,7 +82,7 @@ pub async fn update(id:i32, update_image: NewImage) -> Result<impl warp::Reply, 
 
 pub async fn delete(id: i32) -> Result<impl warp::Reply, warp::Rejection> {
     let conn = POOL.get().unwrap();
-    let response = Image::delete(&id, &conn);
+    let response = Track::delete(&id, &conn);
 
     let reply = match response {
         Ok(null) =>{
@@ -104,7 +98,7 @@ pub async fn delete(id: i32) -> Result<impl warp::Reply, warp::Rejection> {
     Ok(warp::reply::json(&reply))
 }
 
-async fn upload(form: FormData) -> Result<impl Reply, Rejection> {
+pub async fn upload(form: FormData) -> Result<impl Reply, Rejection> {
     let parts: Vec<Part> = form.try_collect().await.map_err(|e| {
         eprintln!("form error: {}", e);
         warp::reject::reject()
@@ -116,18 +110,15 @@ async fn upload(form: FormData) -> Result<impl Reply, Rejection> {
             let file_ending;
             match content_type {
                 Some(file_type) => match file_type {
-                    "media/wav" =>{ 
+                    "audio/wav" =>{ 
                         file_ending=".wav";
-                    }
-                    "media/mp3" =>{
+                    },
+                    "audio/mp3" =>{
                         file_ending=".mp3";
-                    }
-                    "image/png" => {
-                        file_ending=".png";
-                    }
-                    "image/jpg" => {
-                        file_ending =".jpg";
-                    }
+                    },
+                    "audio/ogg"=>{
+                        file_ending=".ogg";
+                    },
                     v => {
                         eprintln!("Invalid file type found = {} ", v);
                         return Err(warp::reject::reject())

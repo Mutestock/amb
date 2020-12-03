@@ -1,7 +1,7 @@
 use warp::{
     filters::BoxedFilter,
-    path,
     Filter,
+    path
 };
 
 // Courtesy of steadylearner
@@ -30,7 +30,7 @@ pub fn get() -> BoxedFilter<(i32, )> {
         .boxed()
 }
 
-pub fn create() -> warp::filters::BoxedFilter<(NewUser,)> {
+pub fn create() -> BoxedFilter<(NewUser,)> {
     let json_body = warp::body::content_length_limit(1024 * 16).and(warp::body::json());
 
     warp::post()
@@ -40,7 +40,7 @@ pub fn create() -> warp::filters::BoxedFilter<(NewUser,)> {
         .boxed()
 }
 
-pub fn update() -> warp::filters::BoxedFilter<(i32, NewUser,)> {
+pub fn update() -> BoxedFilter<(i32, NewUser,)> {
     let json_body = warp::body::content_length_limit(1024 * 16).and(warp::body::json());
 
     warp::put()

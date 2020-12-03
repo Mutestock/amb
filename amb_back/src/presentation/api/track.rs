@@ -3,7 +3,7 @@
 #[macro_export]
 macro_rules! list_tracks {
     () => {
-        track_route::list()
+        track_routes::list()
             .and_then(track_handler::list)
     };
 }
@@ -11,7 +11,7 @@ macro_rules! list_tracks {
 #[macro_export]
 macro_rules! get_track {
     () => {
-        track_route::get()
+        track_routes::get()
             .and_then(track_handler::get)
     };
 }
@@ -19,7 +19,7 @@ macro_rules! get_track {
 #[macro_export]
 macro_rules! create_track {
     () => {
-        track_route::create()
+        track_routes::create()
             .and_then(track_handler::create)
     };
 }
@@ -28,7 +28,7 @@ macro_rules! create_track {
 #[macro_export]
 macro_rules! update_track {
     () => {
-        track_route::update()
+        track_routes::update()
             .and_then(track_handler::update)
     };
 }
@@ -37,8 +37,16 @@ macro_rules! update_track {
 #[macro_export]
 macro_rules! delete_track {
     () => {
-        track_route::delete()
+        track_routes::delete()
             .and_then(track_handler::delete)
+    };
+}
+
+#[macro_export]
+macro_rules! upload_track {
+    () => {
+        track_routes::upload()
+            .and_then(track_handler::upload)
     };
 }
 

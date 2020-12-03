@@ -20,6 +20,7 @@ use self::{
             basic_routes,
             user_routes,
             image_routes,
+            track_routes,
         },
     },
     logic::{
@@ -30,6 +31,7 @@ use self::{
             basic_handler,
             user_handler,
             image_handler,
+            track_handler,
         }
     }
 };
@@ -63,6 +65,8 @@ async fn main() {
         .or(create_image!())
         .or(update_image!())
         .or(delete_image!());
+    
+    let track_routes = upload_track!();
 
     let user_routes = list_users!()
         .or(get_user!())

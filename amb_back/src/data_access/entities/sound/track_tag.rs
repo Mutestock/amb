@@ -1,5 +1,3 @@
-use chrono::naive::{NaiveDateTime};
-
 use diesel::RunQueryDsl;
 use diesel::QueryDsl;
 use diesel::PgConnection;

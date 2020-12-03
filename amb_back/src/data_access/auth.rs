@@ -10,9 +10,8 @@ use warp::{
     reject, Filter, Rejection,
 };
 
-use serde_json;
-use crate::logic::rejections::error_handling::{handle_rejection, Error};
-use crate::data_access::entities::account::user::{UserResponse};
+use crate::logic::rejections::error_handling::Error;
+use crate::data_access::entities::account::user::UserResponse;
 
 const BEARER:&str = "Bearer ";
 
