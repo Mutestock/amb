@@ -11,10 +11,11 @@ use std::{
     fs,
     time::SystemTime
 };
+
 //use uuid::Uuid;
 
 
-#[derive(Insertable, Deserialize, AsChangeset, PartialEq)]
+#[derive(Insertable, Deserialize, AsChangeset, PartialEq, Debug)]
 #[table_name="tracks"]
 pub struct NewTrack {
     pub user_id: i32,
@@ -26,12 +27,37 @@ pub struct NewTrack {
     pub credits: String,
 }
 
+#[derive(Deserialize)]
+pub struct NewTrackReception{
+    pub user_id: i32,
+    pub title: String,
+    pub description: Option<String>,
+    pub duration:i32,
+    pub credits: String,
+}
+
+impl NewTrackReception{
+    pub fn to_new_track(&self, _uuid: String, p: String) -> NewTrack{
+        NewTrack{
+            user_id: self.user_id,
+            title: self.title.to_string(),
+            uuid_fname: _uuid,
+            path: p,
+            description: self.description.to_owned(),
+            duration: self.duration,
+            credits: self.credits.to_string(),
+        }
+    }
+}
+
 fn create_path(new_track: &NewTrack){
-    fs::create_dir_all("/usr/resources/{}/{}");
+    fs::create_dir_all("/usr/resources/{}/{}")
+        .expect("Could not create directory");
 }
 
 impl NewTrack {
     pub fn create(&self, connection: &PgConnection) -> Result<Track, diesel::result::Error> {
+        println!("{:#x?}", &self);
         diesel::insert_into(tracks::table)
             .values(self)
             .get_result(connection)
@@ -62,7 +88,6 @@ impl Track {
     }
 
     pub fn update(track_id: &i32, new_track: &NewTrack, connection: &PgConnection) -> Result<(), diesel::result::Error> {
-
         diesel::update(dsl::tracks.find(track_id))
             .set(new_track)
             .execute(connection)?;

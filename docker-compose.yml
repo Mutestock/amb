@@ -17,6 +17,7 @@ services:
       - DATABASE_URL=postgres://${PG_USER}:${PG_PASS}@amb_postgres2_1:5432/${PG_DB}
       #- DATABASE_URL=${DATABASE_URL}
       - RUST_BACKTRACE=1
+      - RESOURCE_PATH=/usr/resources
     volumes:
       - ./amb_back/target:/usr/target
       - ../resources:/usr/resources

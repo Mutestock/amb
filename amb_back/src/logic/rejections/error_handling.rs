@@ -27,6 +27,15 @@ pub enum Error {
 
     #[error("Access denied")]
     NoPermissionError,
+
+    #[error("Invalid file type found")]
+    InvalidFileTypeError,
+
+    #[error("Uploaded file did not have a name")]
+    MissingFileNameError,
+
+    #[error("File type could not be determined")]
+    FileTypeDeterminationError,
 }
 
 #[derive(Serialize, Debug)]
@@ -51,6 +60,9 @@ pub async fn handle_rejection(err: Rejection) -> Result<impl Reply, Infallible> 
                 StatusCode::INTERNAL_SERVER_ERROR,
                 "Internal Server Error".to_string(),
             ),
+            Error::InvalidFileTypeError => (StatusCode::BAD_REQUEST, e.to_string()),
+            Error::MissingFileNameError => (StatusCode::BAD_REQUEST, e.to_string()),
+            Error::FileTypeDeterminationError => (StatusCode::BAD_REQUEST, e.to_string()),
             _=> (StatusCode::BAD_REQUEST, e.to_string()),
         }
     } else if err.find::<warp::reject::MethodNotAllowed>().is_some() {

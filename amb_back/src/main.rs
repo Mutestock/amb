@@ -66,7 +66,12 @@ async fn main() {
         .or(update_image!())
         .or(delete_image!());
     
-    let track_routes = upload_track!();
+    let track_routes = upload_track!()
+        .or(list_tracks!())
+        .or(get_track!())
+        .or(create_track!())
+        .or(update_track!())
+        .or(delete_track!());
 
     let user_routes = list_users!()
         .or(get_user!())
@@ -82,6 +87,7 @@ async fn main() {
         .or(download_route)
         .or(user_routes)
         .or(image_routes)
+        .or(track_routes)
         .or(home!())
         .recover(error_handling::handle_rejection)
         .with(log)

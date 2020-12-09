@@ -60,6 +60,6 @@ pub fn upload() -> BoxedFilter<(warp::multipart::FormData, )> {
     warp::post()
         .and(path_prefix())
         .and(warp::path("upload"))
-        .and(warp::multipart::form().max_length(5_000_000))
+        .and(warp::multipart::form().max_length(20_000_000))
         .boxed()
 }
