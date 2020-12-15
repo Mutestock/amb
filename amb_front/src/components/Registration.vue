@@ -44,6 +44,7 @@ export default {
           this.password = "";
           this.retypePassword = "";
           this.email = "";
+          this.$alert("Ok");
         } else {
           this.$alert("Password mismatch");
           this.password = "";

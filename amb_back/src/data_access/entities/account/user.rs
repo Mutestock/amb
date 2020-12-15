@@ -49,6 +49,7 @@ pub struct UserAuth {
 // For creating a response to the frontend with non-essential values excluded.
 #[derive(Deserialize, Serialize, Clone)]
 pub struct UserResponse {
+    pub id: i32,
     pub username: String,
     pub email: String,
     pub description: Option<String>,
@@ -83,7 +84,6 @@ impl NewUser {
             .get_result(connection)
     }
 }
-
 
 impl User {
     pub fn find(user_id: &i32, connection: &PgConnection) -> Result<User, diesel::result::Error>{

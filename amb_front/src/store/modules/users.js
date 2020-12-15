@@ -1,11 +1,11 @@
 import { userService } from "../../_services/user_service";
 
 const state = {
-  currentUser: localStorage.getItem("user")
+  currentUser: {},
 };
 
 const getters = {
-  getCurrentUser: (state) => state.currentUser,
+  getCurrentUser: state => state.currentUser,
 };
 
 const actions = {
@@ -13,7 +13,7 @@ const actions = {
     const response = userService.register(User);
     if (response.data) {
       localStorage.setItem("user", JSON.stringify(User));
-      commit("registrationAction", response.data);
+      commit("SET_CURRENT_USER", response.data);
     } else {
       console.log("No response from server");
     }
@@ -31,18 +31,26 @@ const actions = {
           }
         };
         let parsed = parseJwt(data.data.token);
-        commit("loginAction", parsed.user_response);
+        console.log(parsed.user_response);
+        
+        commit("SET_CURRENT_USER", parsed.user_response);
+        console.log(state.currentUser);
+        
       } else {
         console.log("No response from server");
       }
     });
   },
+  async logoutUser({ commit }) {
+    localStorage.removeItem("user");
+    commit("LOGOUT_CURRENT_USER");
+  },
 };
 
 const mutations = {
-  loginAction: (state, currentUser) => (state.currentUser = currentUser),
-  registrationAction: (state, currentUser) => (state.currentUser = currentUser),
-  LOGIN_CURRENT_USER: (state, currentUser) => (state.currentUser = currentUser),
+  SET_CURRENT_USER: (state, currentUser) => (state.currentUser = currentUser),
+  LOGOUT_CURRENT_USER: (state) =>
+    (state.currentUser = "")
 };
 
 export default {

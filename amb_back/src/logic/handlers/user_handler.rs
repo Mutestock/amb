@@ -104,13 +104,13 @@ pub async fn login(user_auth: UserAuth) -> Result<impl warp::Reply, warp::Reject
     let response = User::find_by_username(&user_auth.username, &conn);
     match response {
         Ok(user) => {
-            let matching_passwords = auth::verify_password(&user_auth.username, &user_auth.password, &user.salt.unwrap());
-            println!("{}", matching_passwords);
+            let matching_passwords = auth::verify_password(&user.password, &user_auth.password, &user.salt.unwrap());
             if matching_passwords {
                 User::refresh_last_login_by_username(&user.username, &conn)
                     .expect("Failed at persisting new login time to database");
                 
                 let user_response = UserResponse{
+                    id: user.id,
                     username: user.username,
                     email: user.email,
                     description: user.description,

@@ -25,7 +25,8 @@ const actions = {
             player.start();
         });
         commit("setPlayer", player)
-    }
+    },
+
 };
 
 const mutations = {

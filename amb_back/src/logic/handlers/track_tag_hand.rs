@@ -21,7 +21,7 @@ use crate::{
 };
 
 
-pub async fn list()-> Result<impl warp::Reply, warp::Rejection>{
+pub async fn list() -> Result<impl warp::Reply, warp::Rejection>{
     let conn = POOL.get().unwrap();
     let response = ImageList::list(&conn);
     println!("{:#?}",&response);
@@ -34,11 +34,11 @@ pub async fn get(id: i32) -> Result<impl warp::Reply, warp::Rejection> {
     let response = Image::find(&id, &conn);
 
     let reply = match response {
-        Ok(image) =>{
+        Ok(image) => {
             println!("{:#?}",&image);
             image
         },
-        Err(e)=> {
+        Err(e) => {
             println!("{:#?}",e);
             // Custom error recommended
             return Err(warp::reject::not_found())

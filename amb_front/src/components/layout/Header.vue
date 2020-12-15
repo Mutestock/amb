@@ -1,33 +1,52 @@
 <template>
-  <div>
-    <header class="header">
-      <div id="nav">
-        <router-link to="/">Home</router-link>|
-        <router-link to="/about">About</router-link>|
-        <router-link to="/user">User</router-link>|
-        <router-link to="/registration" v-if="loggedIn"
-          >Registration</router-link
-        >|
-        <router-link to="/login" v-if="loggedIn">Log in</router-link>|
-        <router-link to="/track">Tracks</router-link>
-      </div>
-      <p v-if="username">{{username}}</p>
-    </header>
-  </div>
+  <nav>
+    <v-app-bar app dark>
+      <v-app-bar-nav-icon class="grey--text" @click="showDrawer =!showDrawer"></v-app-bar-nav-icon>Mutezone
+      <router-link to="/">
+        <v-icon color="white">mdi-home</v-icon>
+      </router-link>
+      <router-link to="/about">
+        <v-icon color="white">mdi-information</v-icon>
+      </router-link>
+      <router-link to="/registration" class="account" v-if="!getCurrentUser.username">
+        <v-icon color="white">mdi-account-plus</v-icon>
+      </router-link>
+      <router-link to="/track" v-if="getCurrentUser.username">
+        <v-icon color="white">mdi-music-note-plus</v-icon>
+      </router-link>
+      <router-link to="/login" class="account" v-if="!getCurrentUser.username">
+        <v-icon color="white">mdi-login</v-icon>
+      </router-link>
+      <router-link to="/user" class="account" v-if="getCurrentUser.username">
+        <v-icon color="white">mdi-account</v-icon>
+      </router-link>
+      <v-btn text @click="logoutUser" class="account" v-if="getCurrentUser.username">
+        <v-icon color="white">mdi-logout</v-icon>
+      </v-btn>
+      <v-btn @click="printUsr">Printstuff</v-btn>
+    </v-app-bar>
+  </nav>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions, mapState } from "vuex";
 export default {
   data() {
     return {
-      username: this.getCurrentUser.username,
-      loggedIn: this.hasLoggedInUser,
+      username: this.getCurrentUser.username
     };
   },
   methods: {
-    ...mapGetters(["hasLoggedInUser", "getCurrentUser"]),
+    ...mapActions(["logoutUser"]),
+    printUsr() {
+      console.log(this.username);
+    }
   },
+  computed: {
+    ...mapGetters(["hasLoggedInUser", "getCurrentUser"]),
+    ...mapState(['currentUser'])
+  }
+  
 };
 </script>
 
@@ -35,12 +54,15 @@ export default {
 .header {
   background: #333;
   color: #fff;
-  text-align: center;
   padding: 5x;
 }
 .header a {
   color: #fff;
   padding-right: 10px;
+}
+
+.account {
+  float: right;
 }
 
 #nav {

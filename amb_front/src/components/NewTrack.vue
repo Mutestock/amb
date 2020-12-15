@@ -11,7 +11,7 @@
 
 <script>
 export default {
-    name: "NewTrack",
+  name: "NewTrack",
   data() {
     return {
       title: "",

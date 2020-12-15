@@ -1,11 +1,11 @@
 <template>
-  <div>
-    <div class="login-fields">
+  <v-app>
+    <v-main no-gutters class="login-fields">
       <v-text-field label="Username" hide-details="auto" v-model="username"></v-text-field>
       <v-text-field label="Password" hide-detials="auto" v-model="password" type="password"></v-text-field>
       <v-btn label="Login" elevation="4" @click="loginClick">Login</v-btn>
-    </div>
-  </div>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
@@ -19,13 +19,16 @@ export default {
   },
   methods: {
     ...mapActions(["loginUser"]),
-    ...mapMutations(['LOGIN_CURRENT_USER']),
+    ...mapMutations(["LOGIN_CURRENT_USER"]),
     loginClick() {
       if (!this.emptyFields(this.username, this.password)) {
         console.log(this.username, this.password);
-        let user = this.loginUser({"username":this.username, "password":this.password});
+        let user = {
+          username: this.username,
+          password: this.password
+        };
         console.log(user);
-        this.LOGIN_CURRENT_USER(user);
+        this.loginUser(user);
       }
     },
     emptyFields(username, password) {
@@ -40,9 +43,15 @@ export default {
 </script>
 
 <style scoped>
+.restrict-top {
+  overflow: auto;
+}
 .login-fields {
   align-content: center;
   padding: 50px;
   width: 400px;
+  overflow: auto;
+  position: absolute;
+  top: 0px;
 }
 </style>
