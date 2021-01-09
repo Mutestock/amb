@@ -6,9 +6,9 @@ use std::env;
 // https://docs.diesel.rs/diesel/pg/struct.PgConnection.html
 use diesel::r2d2::ConnectionManager;
 use diesel::{
-    PgConnection,
     //Testing
-    Connection
+    Connection,
+    PgConnection,
 };
 
 pub type Pool = r2d2::Pool<ConnectionManager<PgConnection>>;
@@ -29,11 +29,9 @@ lazy_static! {
 }
 
 // Manual connection without pooling. The basic method. Only used for testing via a route.
-pub fn establish_connection() -> PgConnection{
+pub fn establish_connection() -> PgConnection {
     dotenv().ok();
 
-    let db_url = env::var("DATABASE_URL")
-        .expect("DATABASE_URL must be set.");
-    PgConnection::establish(&db_url)
-        .expect(&format!("Error connecting to {}", db_url))
+    let db_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set.");
+    PgConnection::establish(&db_url).expect(&format!("Error connecting to {}", db_url))
 }

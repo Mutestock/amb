@@ -1,30 +1,61 @@
 <template>
   <nav>
     <v-app-bar app dark>
-      <v-app-bar-nav-icon class="grey--text" @click="showDrawer =!showDrawer"></v-app-bar-nav-icon>Mutezone
+      <v-app-bar-nav-icon
+        @click.stop="drawer = !drawer"
+        v-if="getCurrentUser.username"
+      ></v-app-bar-nav-icon>
+      Mutezone
       <router-link to="/">
         <v-icon color="white">mdi-home</v-icon>
       </router-link>
       <router-link to="/about">
         <v-icon color="white">mdi-information</v-icon>
       </router-link>
-      <router-link to="/registration" class="account" v-if="!getCurrentUser.username">
+      <router-link
+        to="/registration"
+        class="account"
+        v-if="!getCurrentUser.username"
+      >
         <v-icon color="white">mdi-account-plus</v-icon>
-      </router-link>
-      <router-link to="/track" v-if="getCurrentUser.username">
-        <v-icon color="white">mdi-music-note-plus</v-icon>
       </router-link>
       <router-link to="/login" class="account" v-if="!getCurrentUser.username">
         <v-icon color="white">mdi-login</v-icon>
+        Login
       </router-link>
-      <router-link to="/user" class="account" v-if="getCurrentUser.username">
-        <v-icon color="white">mdi-account</v-icon>
-      </router-link>
-      <v-btn text @click="logoutUser" class="account" v-if="getCurrentUser.username">
+      <v-btn
+        text
+        @click="logoutUser"
+        class="account"
+        v-if="getCurrentUser.username"
+      >
         <v-icon color="white">mdi-logout</v-icon>
       </v-btn>
-      <v-btn @click="printUsr">Printstuff</v-btn>
     </v-app-bar>
+    <v-navigation-drawer v-model="drawer" absolute bottom temporary>
+      <v-list nav dense>
+        <v-list-item-group
+          v-model="group"
+          active-class="deep-purple--text text--accent-4"
+        >
+          <v-list-item>
+            <v-list-item-title>
+              <router-link to="/track" v-if="getCurrentUser.username">
+                <v-icon color="black">mdi-music-note-plus</v-icon>
+              </router-link></v-list-item-title
+            >
+          </v-list-item>
+
+          <v-list-item>
+            <v-list-item-title>
+              <router-link to="/user" v-if="getCurrentUser.username">
+                <v-icon color="black">mdi-account</v-icon>
+              </router-link></v-list-item-title
+            >
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+    </v-navigation-drawer>
   </nav>
 </template>
 
@@ -33,20 +64,22 @@ import { mapGetters, mapActions, mapState } from "vuex";
 export default {
   data() {
     return {
-      username: this.getCurrentUser.username
+      drawer: false,
+      group: null,
     };
   },
   methods: {
     ...mapActions(["logoutUser"]),
-    printUsr() {
-      console.log(this.username);
-    }
   },
   computed: {
     ...mapGetters(["hasLoggedInUser", "getCurrentUser"]),
-    ...mapState(['currentUser'])
-  }
-  
+    ...mapState(["currentUser"]),
+  },
+  watch: {
+    group() {
+      this.drawer = false;
+    },
+  },
 };
 </script>
 
@@ -67,6 +100,10 @@ export default {
 
 #nav {
   padding: 30px;
+}
+
+#router-link {
+  color:white;
 }
 
 #nav a {

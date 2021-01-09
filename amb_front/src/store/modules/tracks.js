@@ -1,13 +1,17 @@
 import axios from 'axios';
 import * as Tone from 'tone'
+import { trackService } from "../../_services/user_service";
 
 
 const state = {
     player: null,
     track_to_upload: null,
+    trackList:[]
 };
 
-const getters = {};
+const getters = {
+    getTrackList: (state) =>state.trackList
+};
 
 const actions = {
     async fetchTrackAudio() {
@@ -27,11 +31,18 @@ const actions = {
         commit("setPlayer", player)
     },
 
+    async fetchAllTracks({ commit }) {
+        const response = await trackService.list()
+        commit("SET_trackList", response)
+    }
+
+
 };
 
 const mutations = {
     setPlayer: (state, player) => (state.player = player),
-    set_track_to_uplooad: (state, track_to_upload) => (state.track_to_upload = track_to_upload)
+    setTrackToUpload: (state, track_to_upload) => (state.track_to_upload = track_to_upload),
+    SET_trackList: (state, track_list) => (state.track_list = track_list),
 };
 
 export default {

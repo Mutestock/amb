@@ -10,12 +10,12 @@ extern crate diesel;
 extern crate diesel_migrations;
 
 mod logic;
-mod presentation;
+mod service;
 mod data_access;
 mod schema;
 
 use self::{
-    presentation::{
+    service::{
         routes::{
             basic_routes,
             user_routes,
@@ -37,6 +37,7 @@ use self::{
 };
 
 //let connection = data_access::connection::pg_connection::POOL;
+
 
 #[tokio::main]
 async fn main() {

@@ -1,0 +1,9 @@
+-- Your SQL goes here
+
+CREATE TABLE playlists (
+    id SERIAL PRIMARY KEY NOT NULL,
+    title TEXT NOT NULL UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    description CHARACTER VARYING(2000)
+)

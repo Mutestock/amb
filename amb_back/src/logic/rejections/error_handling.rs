@@ -1,15 +1,10 @@
-use std::convert::Infallible;
-use warp::{
-    http::StatusCode,
-    Reply,
-    Rejection,
-};
 use serde::Serialize;
+use std::convert::Infallible;
 use thiserror::Error;
+use warp::{http::StatusCode, Rejection, Reply};
 
 #[derive(Error, Debug)]
 pub enum Error {
-
     #[error("Incorrect credentials")]
     IncorrectCredentialsError,
 
@@ -63,10 +58,13 @@ pub async fn handle_rejection(err: Rejection) -> Result<impl Reply, Infallible> 
             Error::InvalidFileTypeError => (StatusCode::BAD_REQUEST, e.to_string()),
             Error::MissingFileNameError => (StatusCode::BAD_REQUEST, e.to_string()),
             Error::FileTypeDeterminationError => (StatusCode::BAD_REQUEST, e.to_string()),
-            _=> (StatusCode::BAD_REQUEST, e.to_string()),
+            _ => (StatusCode::BAD_REQUEST, e.to_string()),
         }
     } else if err.find::<warp::reject::MethodNotAllowed>().is_some() {
-        (StatusCode::METHOD_NOT_ALLOWED, "Method Not Allowed".to_string())
+        (
+            StatusCode::METHOD_NOT_ALLOWED,
+            "Method Not Allowed".to_string(),
+        )
     } else {
         eprintln!("unhandled error: {:?}", err);
         (
@@ -75,7 +73,7 @@ pub async fn handle_rejection(err: Rejection) -> Result<impl Reply, Infallible> 
         )
     };
 
-    let json_response = warp::reply::json(&ErrorResponse{
+    let json_response = warp::reply::json(&ErrorResponse {
         status: code.to_string(),
         message,
     });

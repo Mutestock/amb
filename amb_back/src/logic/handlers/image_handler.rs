@@ -1,21 +1,15 @@
-use warp;
+use bytes::BufMut;
+use futures::TryStreamExt;
 use uuid::Uuid;
+use warp;
 use warp::{
     multipart::{FormData, Part},
     Rejection, Reply,
 };
-use futures::TryStreamExt;
-use bytes::BufMut;
 
-use crate::{
-    data_access::{
-        entities::account::image::{
-            ImageList,
-            Image,
-            NewImage,
-        },
-        connection::pg_connection::POOL,
-    },
+use crate::data_access::{
+    connection::pg_connection::POOL,
+    entities::account::image::{Image, ImageList, NewImage},
 };
 
 /*
@@ -23,11 +17,10 @@ This functionality has been excluded from the finals due to time constraints.
 Will be used if/when project continue
 */
 
-
-pub async fn list()-> Result<impl warp::Reply, warp::Rejection>{
+pub async fn list() -> Result<impl warp::Reply, warp::Rejection> {
     let conn = POOL.get().unwrap();
     let response = ImageList::list(&conn);
-    println!("{:#?}",&response);
+    println!("{:#?}", &response);
 
     Ok(warp::reply::json(&response))
 }
@@ -37,19 +30,18 @@ pub async fn get(id: i32) -> Result<impl warp::Reply, warp::Rejection> {
     let response = Image::find(&id, &conn);
 
     let reply = match response {
-        Ok(image) =>{
-            println!("{:#?}",&image);
+        Ok(image) => {
+            println!("{:#?}", &image);
             image
-        },
-        Err(e)=> {
-            println!("{:#?}",e);
+        }
+        Err(e) => {
+            println!("{:#?}", e);
             // Custom error recommended
-            return Err(warp::reject::not_found())
+            return Err(warp::reject::not_found());
         }
     };
     Ok(warp::reply::json(&reply))
 }
-
 
 pub async fn create(new_image: NewImage) -> Result<impl warp::Reply, warp::Rejection> {
     let conn = POOL.get().unwrap();
@@ -57,30 +49,30 @@ pub async fn create(new_image: NewImage) -> Result<impl warp::Reply, warp::Rejec
 
     let reply = match response {
         Ok(new_image) => {
-            println!("{:#?}",&new_image);
-        },
+            println!("{:#?}", &new_image);
+        }
         Err(e) => {
-            println!("{:#?}",&e);
+            println!("{:#?}", &e);
             // Custom error recommended
-            return Err(warp::reject::not_found())
+            return Err(warp::reject::not_found());
         }
     };
     Ok(warp::reply::json(&reply))
 }
 
-pub async fn update(id:i32, update_image: NewImage) -> Result<impl warp::Reply, warp::Rejection> {
+pub async fn update(id: i32, update_image: NewImage) -> Result<impl warp::Reply, warp::Rejection> {
     let conn = POOL.get().unwrap();
     let response = Image::update(&id, &update_image, &conn);
 
     let reply = match response {
         Ok(null) => {
-            println!("{:#?}",&null);
+            println!("{:#?}", &null);
             null
-        },
+        }
         Err(e) => {
-            println!("{:#?}",e);
+            println!("{:#?}", e);
             // Custom error recommended
-            return Err(warp::reject::not_found())
+            return Err(warp::reject::not_found());
         }
     };
     Ok(warp::reply::json(&reply))
@@ -91,14 +83,14 @@ pub async fn delete(id: i32) -> Result<impl warp::Reply, warp::Rejection> {
     let response = Image::delete(&id, &conn);
 
     let reply = match response {
-        Ok(null) =>{
-            println!("{:#?}",&null);
+        Ok(null) => {
+            println!("{:#?}", &null);
             null
-        },
+        }
         Err(e) => {
-            println!("{:#?}",e);
+            println!("{:#?}", e);
             // Custom error recommended
-            return Err(warp::reject::not_found())
+            return Err(warp::reject::not_found());
         }
     };
     Ok(warp::reply::json(&reply))
@@ -116,21 +108,21 @@ async fn upload(form: FormData) -> Result<impl Reply, Rejection> {
             let file_ending;
             match content_type {
                 Some(file_type) => match file_type {
-                    "media/wav" =>{ 
-                        file_ending=".wav";
+                    "media/wav" => {
+                        file_ending = ".wav";
                     }
-                    "media/mp3" =>{
-                        file_ending=".mp3";
+                    "media/mp3" => {
+                        file_ending = ".mp3";
                     }
                     "image/png" => {
-                        file_ending=".png";
+                        file_ending = ".png";
                     }
                     "image/jpg" => {
-                        file_ending =".jpg";
+                        file_ending = ".jpg";
                     }
                     v => {
                         eprintln!("Invalid file type found = {} ", v);
-                        return Err(warp::reject::reject())
+                        return Err(warp::reject::reject());
                     }
                 },
                 None => {

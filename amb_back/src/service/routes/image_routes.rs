@@ -1,18 +1,9 @@
-use warp::{
-    filters::BoxedFilter,
-    Filter,
-    path
-};
+use warp::{filters::BoxedFilter, path, Filter};
 
-// Courtesy of steadylearner
-// https://github.com/steadylearner/Rust-Full-Stack/blob/master/warp/database/2.%20with_db_pool/src/routes/post_route_without_reusable.rs
-
-use crate::data_access::entities::account::user::{NewUser, UserAuth};
-
+use crate::data_access::entities::account::image::NewImage;
 
 fn path_prefix() -> BoxedFilter<()> {
-    path!("api" / "user" / ..)
-        .boxed()
+    path!("api" / "image" / ..).boxed()
 }
 
 pub fn list() -> BoxedFilter<()> {
@@ -22,15 +13,14 @@ pub fn list() -> BoxedFilter<()> {
         .boxed()
 }
 
-pub fn get() -> BoxedFilter<(i32, )> {
-    
+pub fn get() -> BoxedFilter<(i32,)> {
     warp::get()
         .and(path_prefix())
         .and(warp::path::param::<i32>())
         .boxed()
 }
 
-pub fn create() -> BoxedFilter<(NewUser,)> {
+pub fn create() -> BoxedFilter<(NewImage,)> {
     let json_body = warp::body::content_length_limit(1024 * 16).and(warp::body::json());
 
     warp::post()
@@ -40,7 +30,7 @@ pub fn create() -> BoxedFilter<(NewUser,)> {
         .boxed()
 }
 
-pub fn update() -> BoxedFilter<(i32, NewUser,)> {
+pub fn update() -> BoxedFilter<(i32, NewImage)> {
     let json_body = warp::body::content_length_limit(1024 * 16).and(warp::body::json());
 
     warp::put()
@@ -50,21 +40,27 @@ pub fn update() -> BoxedFilter<(i32, NewUser,)> {
         .boxed()
 }
 
-pub fn delete() -> BoxedFilter<(i32, )> {
+pub fn delete() -> BoxedFilter<(i32,)> {
     warp::delete()
         .and(path_prefix())
         .and(warp::path::param::<i32>())
         .boxed()
 }
 
-// UserAuth being username/password
-pub fn login() -> BoxedFilter<(UserAuth, )>{
-    let json_body = warp::body::content_length_limit(1024 * 16).and(warp::body::json());
-    let login_path = path!("api"/"user"/"login");
-
+pub fn upload_image() -> BoxedFilter<(warp::multipart::FormData,)> {
     warp::post()
-        .and(login_path)
-        .and(warp::path::end())
-        .and(json_body)
+        .and(path_prefix())
+        .and(warp::path("upload"))
+        .and(warp::multipart::form().max_length(5_000_000))
         .boxed()
 }
+/*
+
+pub fn get_image_by_user_id() -> BoxedFilter<(i32, )>{
+    warp::get()
+        .and(path_prefix())
+        .and(warp::path::("usr="))
+        .and(warp::path::param::<i32>())
+        .boxed()
+}
+*/

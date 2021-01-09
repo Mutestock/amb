@@ -2,21 +2,17 @@ use crate::schema::tracks;
 use crate::schema::tracks::dsl;
 use crate::schema::tracks::dsl::*;
 
-use diesel::RunQueryDsl;
-use diesel::QueryDsl;
 use diesel::ExpressionMethods;
 use diesel::PgConnection;
+use diesel::QueryDsl;
+use diesel::RunQueryDsl;
 use serde_derive::{Deserialize, Serialize};
-use std::{
-    fs,
-    time::SystemTime
-};
+use std::{fs, time::SystemTime};
 
 //use uuid::Uuid;
 
-
 #[derive(Insertable, Deserialize, AsChangeset, PartialEq, Debug)]
-#[table_name="tracks"]
+#[table_name = "tracks"]
 pub struct NewTrack {
     pub user_id: i32,
     pub title: String,
@@ -28,17 +24,17 @@ pub struct NewTrack {
 }
 
 #[derive(Deserialize)]
-pub struct NewTrackReception{
+pub struct NewTrackReception {
     pub user_id: i32,
     pub title: String,
     pub description: Option<String>,
-    pub duration:i32,
+    pub duration: i32,
     pub credits: String,
 }
 
-impl NewTrackReception{
-    pub fn to_new_track(&self, _uuid: String, p: String) -> NewTrack{
-        NewTrack{
+impl NewTrackReception {
+    pub fn to_new_track(&self, _uuid: String, p: String) -> NewTrack {
+        NewTrack {
             user_id: self.user_id,
             title: self.title.to_string(),
             uuid_fname: _uuid,
@@ -50,9 +46,8 @@ impl NewTrackReception{
     }
 }
 
-fn create_path(new_track: &NewTrack){
-    fs::create_dir_all("/usr/resources/{}/{}")
-        .expect("Could not create directory");
+fn create_path(new_track: &NewTrack) {
+    fs::create_dir_all("/usr/resources/{}/{}").expect("Could not create directory");
 }
 
 impl NewTrack {
@@ -65,7 +60,7 @@ impl NewTrack {
 }
 
 #[derive(Identifiable, Queryable, Serialize, Deserialize, Debug, PartialEq)]
-pub struct Track{
+pub struct Track {
     pub id: i32,
     pub user_id: i32,
     pub title: String,
@@ -87,7 +82,11 @@ impl Track {
         Ok(())
     }
 
-    pub fn update(track_id: &i32, new_track: &NewTrack, connection: &PgConnection) -> Result<(), diesel::result::Error> {
+    pub fn update(
+        track_id: &i32,
+        new_track: &NewTrack,
+        connection: &PgConnection,
+    ) -> Result<(), diesel::result::Error> {
         diesel::update(dsl::tracks.find(track_id))
             .set(new_track)
             .execute(connection)?;

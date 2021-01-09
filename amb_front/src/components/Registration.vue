@@ -1,15 +1,28 @@
 <template>
   <div>
     <div class="registration-fields">
-      <v-text-field label="Username" hide-details="auto" v-model="username"></v-text-field>
-      <v-text-field label="Password" hide-details="auto" v-model="password" type="password"></v-text-field>
+      <v-text-field
+        label="Username"
+        hide-details="auto"
+        v-model="username"
+      ></v-text-field>
+      <v-text-field
+        label="Password"
+        hide-details="auto"
+        v-model="password"
+        type="password"
+      ></v-text-field>
       <v-text-field
         label="Retype password"
         hide-details="auto"
         v-model="retypePassword"
         type="password"
       ></v-text-field>
-      <v-text-field label="Email" hide-details="auto" v-model="email"></v-text-field>
+      <v-text-field
+        label="Email"
+        hide-details="auto"
+        v-model="email"
+      ></v-text-field>
       <v-btn elevation="4" @click="registerClick">Register</v-btn>
     </div>
   </div>
@@ -24,7 +37,7 @@ export default {
       username: "",
       password: "",
       retypePassword: "",
-      email: ""
+      email: "",
     };
   },
   methods: {
@@ -37,7 +50,7 @@ export default {
             password: this.password,
             email: this.email,
             description: "",
-            admin: false
+            admin: false,
           };
           this.registerUser(user);
           this.username = "";
@@ -64,8 +77,8 @@ export default {
         return true;
       }
       return false;
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -1,18 +1,16 @@
-
-use diesel::RunQueryDsl;
-use diesel::QueryDsl;
-use diesel::PgConnection;
 use diesel::ExpressionMethods;
+use diesel::PgConnection;
+use diesel::QueryDsl;
+use diesel::RunQueryDsl;
 use serde_derive::{Deserialize, Serialize};
 
+use crate::data_access::auth;
 use crate::schema::users;
 use crate::schema::users::dsl;
 use crate::schema::users::dsl::*;
-use crate::data_access::auth;
 
-use std::time::SystemTime;
 use rand::Rng;
-
+use std::time::SystemTime;
 
 #[derive(Identifiable, Queryable, Serialize, Deserialize, Debug, PartialEq)]
 pub struct User {
@@ -29,7 +27,7 @@ pub struct User {
 }
 
 #[derive(Insertable, Deserialize, AsChangeset, PartialEq)]
-#[table_name="users"]
+#[table_name = "users"]
 pub struct NewUser {
     pub username: String,
     pub password: String,
@@ -42,7 +40,7 @@ pub struct NewUser {
 // For login reception
 #[derive(Deserialize)]
 pub struct UserAuth {
-    pub username: String, 
+    pub username: String,
     pub password: String,
 }
 
@@ -61,14 +59,14 @@ pub struct UserResponse {
 
 #[derive(Serialize)]
 pub struct LoginResponse {
-    pub token: String, 
+    pub token: String,
 }
 
 impl NewUser {
-    pub fn create(&self, connection: &PgConnection) -> Result<User, diesel::result::Error> {        
+    pub fn create(&self, connection: &PgConnection) -> Result<User, diesel::result::Error> {
         let salted = rand::thread_rng().gen::<[u8; 32]>();
-        let salted = format!("{:?}",salted);
-        let with_encryption = NewUser{
+        let salted = format!("{:?}", salted);
+        let with_encryption = NewUser {
             username: self.username.to_string(),
             password: auth::hash_and_salt(&self.password, &salted),
             email: self.email.to_string(),
@@ -86,27 +84,39 @@ impl NewUser {
 }
 
 impl User {
-    pub fn find(user_id: &i32, connection: &PgConnection) -> Result<User, diesel::result::Error>{
+    pub fn find(user_id: &i32, connection: &PgConnection) -> Result<User, diesel::result::Error> {
         users::table.find(user_id).first(connection)
     }
 
-    pub fn delete(user_id: &i32, connection: &PgConnection) -> Result<(), diesel::result::Error>{
+    pub fn delete(user_id: &i32, connection: &PgConnection) -> Result<(), diesel::result::Error> {
         diesel::delete(dsl::users.find(user_id)).execute(connection)?;
         Ok(())
     }
 
-    pub fn update(user_id: &i32, new_user: &NewUser, connection: &PgConnection) -> Result<(), diesel::result::Error>{
+    pub fn update(
+        user_id: &i32,
+        new_user: &NewUser,
+        connection: &PgConnection,
+    ) -> Result<(), diesel::result::Error> {
         diesel::update(dsl::users.find(user_id))
             .set(new_user)
             .execute(connection)?;
         Ok(())
     }
- 
-    pub fn find_by_username(incoming_username: &str, connection: &PgConnection) -> Result<User, diesel::result::Error>{
-        users::table.filter(username.eq(incoming_username)).first(connection)
+
+    pub fn find_by_username(
+        incoming_username: &str,
+        connection: &PgConnection,
+    ) -> Result<User, diesel::result::Error> {
+        users::table
+            .filter(username.eq(incoming_username))
+            .first(connection)
     }
 
-    pub fn refresh_last_login_by_username(incoming_username: &str, connection: &PgConnection) -> Result<(), diesel::result::Error>{
+    pub fn refresh_last_login_by_username(
+        incoming_username: &str,
+        connection: &PgConnection,
+    ) -> Result<(), diesel::result::Error> {
         diesel::update(users.filter(username.eq(incoming_username)))
             .set(last_login.eq(Some(SystemTime::now())))
             .execute(connection)?;
@@ -123,6 +133,6 @@ impl UserList {
             .limit(10)
             .load::<User>(connection)
             .expect("Error loading users");
-            UserList(result)
+        UserList(result)
     }
 }

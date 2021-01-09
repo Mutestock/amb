@@ -3,10 +3,7 @@
     <div id="app">
       <title>Mutezone</title>
       <v-main>
-        <Header showDrawer />
-        <div v-if="showDrawer">
-          <RecommendationDrawer showDrawer />
-        </div>
+        <Header />
         <router-view />
       </v-main>
     </div>
@@ -15,16 +12,11 @@
 
 <script>
 import Header from "@/components/layout/Header";
-import RecommendationDrawer from "@/components/layout/RecommendationsDrawer";
 export default {
   name: "app",
   components: {
-    Header,
-    RecommendationDrawer
+    Header
   },
-  props: {
-    showDrawer: Boolean
-  }
 };
 </script>
 

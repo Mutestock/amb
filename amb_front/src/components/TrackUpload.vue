@@ -1,17 +1,29 @@
 <template>
   <v-app>
-    <div>
+    <v-card elevation="7" class="card">
       <div class="registration-fields">
-        <v-text-field label="Title" hide-details="auto" v-model="title"></v-text-field>
-        <v-text-field label="Description" hide-details="auto" v-model="description"></v-text-field>
-        <v-text-field label="Credits" hide-details="auto" v-model="credits"></v-text-field>
+        <v-text-field
+          label="Title"
+          hide-details="auto"
+          v-model="title"
+        ></v-text-field>
+        <v-text-field
+          label="Description"
+          hide-details="auto"
+          v-model="description"
+        ></v-text-field>
+        <v-text-field
+          label="Credits"
+          hide-details="auto"
+          v-model="credits"
+        ></v-text-field>
       </div>
-      <div class="upload">
+      <div class="registration-fields">
         <v-file-input @change="onFileSelected"></v-file-input>
         <v-btn elevation="4" @click="onUpload">Upload</v-btn>
         <v-progress-linear value="progressPct"></v-progress-linear>
       </div>
-    </div>
+    </v-card>
   </v-app>
 </template>
 
@@ -19,6 +31,7 @@
 import axios from "axios";
 import { mapGetters } from "vuex";
 import * as Tone from "tone";
+import store from "../store";
 
 export default {
   name: "TrackUpload",
@@ -26,14 +39,14 @@ export default {
     return {
       title: "",
       description: "",
-      duration: "",
+      duration: 0,
       credits: "",
       progressPct: 0,
-      selectedFile: null
+      selectedFile: null,
     };
   },
   computed: mapGetters({
-    currentUser: "getCurrentUser"
+    currentUser: "getCurrentUser",
   }),
   methods: {
     onFileSelected(event) {
@@ -46,35 +59,58 @@ export default {
       this.selectedFile = event;
     },
     onUpload() {
-      const fd = new FormData();
-      console.log(this.selectedFile);
+      if(this.title ==="" || this.credits==="")[
+        this.$alert("Neither title nor credits can be empty")
+      ]
+      else if (this.selectedFile !== null) {
+        const fd = new FormData();
 
-      fd.append("file", this.selectedFile, this.selectedFile.name);
-
-      fd.append(
-        "track",
-        `
+        fd.append("file", this.selectedFile, this.selectedFile.name);
+        fd.append(
+          "track",
+          `
         {
-            "user_id": ${this.getCurrentUser.id},
-            "title": ${this.title},
-            "description": ${this.description},
+            "user_id": ${store.getters.getCurrentUser.id},
+            "title": "${this.title}",
+            "description": "${this.description}",
             "duration": 0,
-            "credits": ${this.credits}
+            "credits": "${this.credits}"
         }
         `
-      );
-
-      axios.post(process.env.VUE_APP_BACK_END_HOST + "/api/track/upload", fd, {
-        onUploadProgress: uploadEvent => {
-          this.pctUpdate(
-            Math.round((uploadEvent.loaded / uploadEvent.total) * 100)
-          );
-        }
-      });
+        );
+        axios.post(
+          process.env.VUE_APP_BACK_END_HOST + "/api/track/upload",
+          fd,
+          {
+            onUploadProgress: (uploadEvent) => {
+              this.pctUpdate(
+                Math.round((uploadEvent.loaded / uploadEvent.total) * 100)
+              );
+            },
+          }
+        );
+        this.title = "";
+        this.description = "";
+        this.duration = 0;
+        this.credits = "";
+        this.selectedFile = null;
+        this.$alert("Ok");
+      } else {
+        this.$alert("Please select a file to upload");
+      }
     },
     pctUpdate(pct) {
       this.progressPct = pct;
-    }
-  }
+    },
+  },
 };
 </script>
+
+<style scoped>
+.card {
+  width: 50%;
+}
+.registration-fields {
+  padding: 20px;
+}
+</style>

@@ -24,7 +24,7 @@ table! {
     }
 }
 
-table!{
+table! {
     tracks (id) {
         id -> Int4,
         user_id -> Int4,
@@ -41,8 +41,4 @@ table!{
 joinable!(images -> users (user_id));
 joinable!(tracks -> users (user_id));
 
-allow_tables_to_appear_in_same_query!(
-    images,
-    users,
-    tracks
-);
+allow_tables_to_appear_in_same_query!(images, users, tracks);

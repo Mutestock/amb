@@ -1,18 +1,12 @@
-use warp::{
-    filters::BoxedFilter,
-    Filter,
-    path
-};
+use warp::{filters::BoxedFilter, path, Filter};
 
-use crate::data_access::entities::sound::track::{NewTrack};
+use crate::data_access::entities::sound::track::NewTrack;
 
 // Courtesy of steadylearner
 // https://github.com/steadylearner/Rust-Full-Stack/blob/master/warp/database/2.%20with_db_pool/src/routes/post_route_without_reusable.rs
 
-
 fn path_prefix() -> BoxedFilter<()> {
-    path!("api" / "track" / ..)
-        .boxed()
+    path!("api" / "track" / ..).boxed()
 }
 
 pub fn list() -> BoxedFilter<()> {
@@ -22,7 +16,7 @@ pub fn list() -> BoxedFilter<()> {
         .boxed()
 }
 
-pub fn get() -> BoxedFilter<(i32, )> {
+pub fn get() -> BoxedFilter<(i32,)> {
     warp::get()
         .and(path_prefix())
         .and(warp::path::param::<i32>())
@@ -39,7 +33,7 @@ pub fn create() -> BoxedFilter<(NewTrack,)> {
         .boxed()
 }
 
-pub fn update() -> BoxedFilter<(i32, NewTrack,)> {
+pub fn update() -> BoxedFilter<(i32, NewTrack)> {
     let json_body = warp::body::content_length_limit(1024 * 16).and(warp::body::json());
 
     warp::put()
@@ -49,14 +43,14 @@ pub fn update() -> BoxedFilter<(i32, NewTrack,)> {
         .boxed()
 }
 
-pub fn delete() -> BoxedFilter<(i32, )> {
+pub fn delete() -> BoxedFilter<(i32,)> {
     warp::delete()
         .and(path_prefix())
         .and(warp::path::param::<i32>())
         .boxed()
 }
 // Consider uuid param
-pub fn upload() -> BoxedFilter<(warp::multipart::FormData, )> {
+pub fn upload() -> BoxedFilter<(warp::multipart::FormData,)> {
     warp::post()
         .and(path_prefix())
         .and(warp::path("upload"))

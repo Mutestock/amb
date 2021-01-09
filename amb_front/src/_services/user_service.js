@@ -5,7 +5,6 @@ const blackListedSymbolsPattern = /[&\\/<>'=?!{}]/;
 const USER_URL_BASE = process.env.VUE_APP_BACK_END_HOST + "/api/user";
 
 function checkIllegalCharacters(input) {
-  console.log(input);
   if (input.replace(blackListedSymbolsPattern, "").length == input.length) {
     return input;
   } else {

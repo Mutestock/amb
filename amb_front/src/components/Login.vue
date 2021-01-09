@@ -1,34 +1,43 @@
 <template>
   <v-app>
     <v-main no-gutters class="login-fields">
-      <v-text-field label="Username" hide-details="auto" v-model="username"></v-text-field>
-      <v-text-field label="Password" hide-detials="auto" v-model="password" type="password"></v-text-field>
+      <v-text-field
+        label="Username"
+        hide-details="auto"
+        v-model="username"
+      ></v-text-field>
+      <v-text-field
+        label="Password"
+        hide-detials="auto"
+        v-model="password"
+        type="password"
+      ></v-text-field>
       <v-btn label="Login" elevation="4" @click="loginClick">Login</v-btn>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import { mapActions, mapMutations } from "vuex";
+import { mapActions, } from "vuex";
+import store from "../store";
 export default {
   data() {
     return {
       username: "",
-      password: ""
+      password: "",
     };
   },
   methods: {
     ...mapActions(["loginUser"]),
-    ...mapMutations(["LOGIN_CURRENT_USER"]),
     loginClick() {
       if (!this.emptyFields(this.username, this.password)) {
-        console.log(this.username, this.password);
         let user = {
           username: this.username,
-          password: this.password
+          password: this.password,
         };
-        console.log(user);
-        this.loginUser(user);
+        store.dispatch('loginUser',user).then(()=>{
+          console.log("boop");
+        });
       }
     },
     emptyFields(username, password) {
@@ -37,8 +46,8 @@ export default {
         return true;
       }
       return false;
-    }
-  }
+    },
+  },
 };
 </script>
 

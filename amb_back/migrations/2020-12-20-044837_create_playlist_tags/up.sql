@@ -1,0 +1,7 @@
+-- Your SQL goes here
+
+CREATE TABLE playlist_tags (
+    id SERIAL PRIMARY KEY NOT NULL,
+    name CHARACTER VARYING(2000),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
