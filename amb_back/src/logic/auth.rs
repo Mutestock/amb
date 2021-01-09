@@ -10,7 +10,7 @@ use warp::{
     reject, Filter, Rejection,
 };
 
-use crate::data_access::entities::account::user::UserResponse;
+use crate::entities::account::user::UserResponse;
 use crate::logic::rejections::error_handling::Error;
 
 const BEARER: &str = "Bearer ";
@@ -110,7 +110,7 @@ fn jwt_from_header(headers: &HeaderMap<HeaderValue>) -> Result<String, Error> {
 }
 
 #[test]
-fn test_hash_and_salt() {
+fn test_hash_and_salt() { 
     let test_password = "Some Password";
     let test_salt = "Some Salt";
     let hashed_and_salted = hash_and_salt(&test_password, &test_salt);

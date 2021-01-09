@@ -1,13 +1,12 @@
 use std::time::SystemTime;
 use warp;
 
+use crate::entities::account::user::{
+    LoginResponse, NewUser, User, UserAuth, UserList, UserResponse,
+};
 use crate::{
-    data_access::{
-        auth,
-        connection::pg_connection::POOL,
-        entities::account::user::{LoginResponse, NewUser, User, UserAuth, UserList, UserResponse},
-    },
-    logic::rejections::error_handling,
+    data_access::connection::pg_connection::POOL,
+    logic::{auth, rejections::error_handling},
 };
 
 pub async fn list() -> Result<impl warp::Reply, warp::Rejection> {

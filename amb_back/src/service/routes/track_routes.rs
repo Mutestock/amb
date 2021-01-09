@@ -1,6 +1,6 @@
 use warp::{filters::BoxedFilter, path, Filter};
 
-use crate::data_access::entities::sound::track::NewTrack;
+use crate::entities::sound::track::NewTrack;
 
 // Courtesy of steadylearner
 // https://github.com/steadylearner/Rust-Full-Stack/blob/master/warp/database/2.%20with_db_pool/src/routes/post_route_without_reusable.rs

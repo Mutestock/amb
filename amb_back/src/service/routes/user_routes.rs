@@ -3,7 +3,7 @@ use warp::{filters::BoxedFilter, path, Filter};
 // Courtesy of steadylearner
 // https://github.com/steadylearner/Rust-Full-Stack/blob/master/warp/database/2.%20with_db_pool/src/routes/post_route_without_reusable.rs
 
-use crate::data_access::entities::account::user::{NewUser, UserAuth};
+use crate::entities::account::user::{NewUser, UserAuth};
 
 fn path_prefix() -> BoxedFilter<()> {
     path!("api" / "user" / ..).boxed()

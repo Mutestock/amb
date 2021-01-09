@@ -1,6 +1,6 @@
 use warp::{filters::BoxedFilter, path, Filter};
 
-use crate::data_access::entities::account::image::NewImage;
+use crate::entities::account::image::NewImage;
 
 fn path_prefix() -> BoxedFilter<()> {
     path!("api" / "image" / ..).boxed()

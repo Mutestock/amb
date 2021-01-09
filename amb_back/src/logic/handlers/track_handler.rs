@@ -8,16 +8,11 @@ use warp::{
     Rejection, Reply,
 };
 
-use crate::{
-    data_access::{
-        connection::pg_connection::POOL,
-        entities::{
-            account::user::User,
-            sound::track::{NewTrack, NewTrackReception, Track, TrackList},
-        },
-    },
-    logic::rejections::error_handling,
+use crate::entities::{
+    account::user::User,
+    sound::track::{NewTrack, NewTrackReception, Track, TrackList},
 };
+use crate::{data_access::connection::pg_connection::POOL, logic::rejections::error_handling};
 
 pub async fn list() -> Result<impl warp::Reply, warp::Rejection> {
     let conn = POOL.get().unwrap();
@@ -245,8 +240,7 @@ pub async fn upload(form: FormData) -> Result<impl Reply, Rejection> {
 
             println!("{}", &directory_path_to_create);
 
-            fs::create_dir_all(directory_path_to_create)
-                .expect("Could not create directory");
+            fs::create_dir_all(directory_path_to_create).expect("Could not create directory");
 
             match response {
                 Ok(new_track) => {

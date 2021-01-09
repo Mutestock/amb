@@ -12,6 +12,7 @@ extern crate diesel_migrations;
 mod logic;
 mod service;
 mod data_access;
+mod entities;
 mod schema;
 
 use self::{

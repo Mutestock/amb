@@ -4,7 +4,7 @@ use diesel::QueryDsl;
 use diesel::PgConnection;
 use serde_derive::{Deserialize, Serialize};
 
-use crate::data_access::entities::account::user::User;
+use crate::entities::account::user::User;
 use crate::schema::images;
 use crate::schema::images::dsl;
 use crate::schema::images::dsl::*;

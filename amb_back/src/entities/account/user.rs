@@ -4,7 +4,7 @@ use diesel::QueryDsl;
 use diesel::RunQueryDsl;
 use serde_derive::{Deserialize, Serialize};
 
-use crate::data_access::auth;
+use crate::logic::auth;
 use crate::schema::users;
 use crate::schema::users::dsl;
 use crate::schema::users::dsl::*;
