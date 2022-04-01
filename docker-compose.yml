@@ -10,11 +10,11 @@ services:
     container_name: amb_back
     environment: 
       - DATABASE_API_KEY=${DATABASE_API_KEY}
-      - POSTGRES_USER=${PG_USER}
-      - POSTGRES_PASSWORD=${PG_PASS}
-      - POSTGRES_DB=${PG_DB}
+      - POSTGRES_USER=test_user
+      - POSTGRES_PASSWORD=test_pass
+      - POSTGRES_DB=test_db
       - AMBIENCE_JWT_TOKEN_SECRET=${AMBIENCE_JWT_TOKEN_SECRET}
-      - DATABASE_URL=postgres://${PG_USER}:${PG_PASS}@amb_postgres2_1:5432/${PG_DB}
+      - DATABASE_URL=postgres://test_user:test_pass@amb_pg:5432/test_db
       #- DATABASE_URL=${DATABASE_URL}
       - RUST_BACKTRACE=1
       - RESOURCE_PATH=/usr/resources
@@ -44,12 +44,13 @@ services:
       - app-network
 
   postgres2:
+    container_name: amb_pg
     image: postgres:11-alpine
     restart: always
     environment: 
-      - POSTGRES_USER=${PG_USER}
-      - POSTGRES_PASSWORD=${PG_PASS}
-      - POSTGRES_DB=${PG_DB}
+      - POSTGRES_USER=test_user
+      - POSTGRES_PASSWORD=test_pass
+      - POSTGRES_DB=test_db
       - PGDATA=/var/lib/postgres/data
     ports: 
         - 5432:5432
